@@ -18,10 +18,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chaquo.python.PyObject;
@@ -40,7 +42,7 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OutputWritable {
 
     static final int REQUEST_TAKE_PHOTO = 1;
     private static final String TAG = "MainActivity";
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     String currentPhotoPath;
     private boolean isImageFitToScreen;
     private String outputFilename;
+    private TextView txtStatusProcessamento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +191,10 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false); // if you want user to wait for some process to finish,
-        builder.setView(R.layout.layout_loading_dialog);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.layout_loading_dialog, null);
+        txtStatusProcessamento = dialogView.findViewById(R.id.txtStatusProcessamento);
+        builder.setView(dialogView);
         final AlertDialog dialog = builder.create();
         dialog.show();
 
@@ -200,7 +206,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Python py = Python.getInstance();
                 PyObject pyobj = py.getModule("main");
-                PyObject pyResponse = pyobj.callAttr("realiza_contagem", currentPhotoPath);
+                OutputWritable activityRef = MainActivity.this;
+                PyObject pyResponse = pyobj.callAttr("realiza_contagem", currentPhotoPath, activityRef);
 
                 outputFilename = pyResponse.toString();
 
@@ -261,4 +268,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void writeOutput(final String output) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtStatusProcessamento.setText(output);
+            }
+        });
+    }
 }

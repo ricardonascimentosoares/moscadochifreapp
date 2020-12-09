@@ -22,11 +22,17 @@ import time
 
 from pathlib import Path
 
+from com.facom.rvns.moscadochifreapp import OutputWritable as PythonClass
+from java import jclass
+from java import cast
 
 
 #img = 'image/img8.jpg'
 
-def realiza_contagem(img):
+def realiza_contagem(img, activity_ref):
+
+    OutputWritable = jclass("com.facom.rvns.moscadochifreapp.OutputWritable")
+    outputWritable = cast(OutputWritable, activity_ref)
 
     inicio = time.time()
     # Atributos
@@ -55,33 +61,42 @@ def realiza_contagem(img):
 
     # Pre processamento
     print('Pre-processamento...')
+    outputWritable.writeOutput("Pre-processamento...")
     pre = b_pre_processamento(imagem, suav_bov)
 
     print('Definindo regiao de interesse...')
+    outputWritable.writeOutput("Definindo regiao de interesse...")
     # Definição da região de interesse
     regiao = regiao_interesse(pre)
 
     print('Aplicando Watershed para segmentar o bovino...')
+    outputWritable.writeOutput("Aplicando Watershed para segmentar o bovino...")
     # Algoritmo Watershed para segmentar o bovino
     water = watershed(regiao, imagem, w_erode, w_dilate)
 
     print('Extraindo a mascara do bovino...')
+    outputWritable.writeOutput("Extraindo a mascara do bovino...")
     # Extrai a mascara do bovino da imagem original
     mascara = mascara_bovino(water[0], water[1], imagem)
 
     print('Detectando as bordas da imagem...')
+    outputWritable.writeOutput("Detectando as bordas da imagem...")
     # Detecta as bordas da imagem
     bordas = identifica_bordas(mascara)
 
     print('Aplicando filtros de melhoramento na imagem...')
+    outputWritable.writeOutput("Aplicando filtros de melhoramento na imagem...")
     # Filtros de melhoramento na imagem
     melhora = melhora_imagem(bordas[1])
 
     print('Limpando os contornos do bovino...')
+    outputWritable.writeOutput("Limpando os contornos do bovino...")
     # Limpa contornos do bovino
     contornos = regiao_int(melhora[0], original, pix_cont)
 
+
     print('Identificando as moscas-do-chifre e realizando a contagem...\n\n')
+    outputWritable.writeOutput("Identificando as moscas-do-chifre e realizando a contagem...")
     # Identifica as moscas-do-chifre e realiza a contagem
     ident = identifica_mosca(contornos, imagem, perim)
     total = ident[1]
