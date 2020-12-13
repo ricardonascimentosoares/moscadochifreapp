@@ -44,13 +44,13 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements OutputWritable {
 
-    static final int REQUEST_TAKE_PHOTO = 1;
     private static final String TAG = "MainActivity";
+
+    private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int RESULT_LOAD_IMG = 2;
     private ImageView imageView1;
     private ImageView imageView2;
-    String currentPhotoPath;
-    private boolean isImageFitToScreen;
+    private String currentPhotoPath;
     private String outputFilename;
     private TextView txtStatusProcessamento;
 
@@ -63,27 +63,17 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FullScreenImage.class);
-
-                Bundle extras = new Bundle();
-                extras.putString("imagebitmap", currentPhotoPath);
-                intent.putExtras(extras);
-                startActivity(intent);
+                startFullscreen(currentPhotoPath);
             }
         });
+
         imageView2 = findViewById(R.id.imageView2);
         imageView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FullScreenImage.class);
-
-                Bundle extras = new Bundle();
-                extras.putString("imagebitmap", outputFilename);
-                intent.putExtras(extras);
-                startActivity(intent);
+                startFullscreen(outputFilename);
             }
         });
-
 
         Button btnCapturar = findViewById(R.id.btnCapturar);
         btnCapturar.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +92,6 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         });
 
     }
-
-
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -132,36 +120,35 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
-            if (requestCode == REQUEST_TAKE_PHOTO) {
-                //setImageViewBitmap(imageView1, currentPhotoPath);
-                startPython();
-            }
-            else if (requestCode ==  RESULT_LOAD_IMG){
-                try {
-                    // Creating file
-                    File photoFile = null;
+            switch (requestCode) {
+                case REQUEST_TAKE_PHOTO:
+                    startPython();
+                    break;
+                case RESULT_LOAD_IMG:
                     try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-                        Log.d(TAG, "Error occurred while creating the file");
+                        // Creating file
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            Log.d(TAG, "Error occurred while creating the file");
+                        }
+
+                        InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                        FileOutputStream fileOutputStream = new FileOutputStream(photoFile);
+                        // Copying
+                        copyStream(inputStream, fileOutputStream);
+                        fileOutputStream.close();
+                        inputStream.close();
+
+                    } catch (Exception e) {
+                        Log.d(TAG, "onActivityResult: " + e.toString());
                     }
 
-                    InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                    FileOutputStream fileOutputStream = new FileOutputStream(photoFile);
-                    // Copying
-                    copyStream(inputStream, fileOutputStream);
-                    fileOutputStream.close();
-                    inputStream.close();
-
-                } catch (Exception e) {
-                    Log.d(TAG, "onActivityResult: " + e.toString());
-                }
-
-                startPython();
+                    startPython();
+                    break;
             }
         }
-
-
     }
 
     private File createImageFile() throws IOException {
@@ -174,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
-
 
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
@@ -221,8 +207,6 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
                 });
             }
         });
-
-
     }
 
     private  void setImageViewBitmap(ImageView imageView, String path){
@@ -242,24 +226,6 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
     }
 
-    private String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } catch (Exception e) {
-            Log.e(TAG, "getRealPathFromURI Exception : " + e.toString());
-            return "";
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
     public static void copyStream(InputStream input, OutputStream output) throws IOException {
         byte[] buffer = new byte[1024];
         int bytesRead;
@@ -276,5 +242,14 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
                 txtStatusProcessamento.setText(output);
             }
         });
+    }
+
+    private void startFullscreen(String path){
+        Intent intent = new Intent(MainActivity.this, FullScreenImage.class);
+
+        Bundle extras = new Bundle();
+        extras.putString("imagebitmap", path);
+        intent.putExtras(extras);
+        startActivity(intent);
     }
 }
