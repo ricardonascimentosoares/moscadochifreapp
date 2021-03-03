@@ -45,14 +45,16 @@ import java.util.concurrent.Executors;
 public class MainActivity extends AppCompatActivity implements OutputWritable {
 
     private static final String TAG = "MainActivity";
-
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int RESULT_LOAD_IMG = 2;
+
     private ImageView imageView1;
     private ImageView imageView2;
     private String currentPhotoPath;
     private String outputFilename;
     private TextView txtStatusProcessamento;
+    private TextView txtTotalMoscas;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +93,13 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
             }
         });
 
+        txtTotalMoscas = findViewById(R.id.txtTotalMoscas);
+
     }
 
+    /**
+     * Metodo que inicia a activity responsável pela captura da imagem utilizando a camera do dispositivo
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -151,6 +158,11 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         }
     }
 
+    /**
+     * Cria o arquivo de imagem dentro do diretório onde o applicativo é instalado
+     * @return
+     * @throws IOException
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -168,6 +180,9 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
     }
 
 
+    /**
+     * Metodo principal que inicia a integracao do Java com Python e faz a chamada dos métodos
+     */
     private void startPython(){
 
         // "context" must be an Activity, Service or Application object from your app.
@@ -175,14 +190,7 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
             Python.start(new AndroidPlatform(getApplicationContext()));
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false); // if you want user to wait for some process to finish,
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.layout_loading_dialog, null);
-        txtStatusProcessamento = dialogView.findViewById(R.id.txtStatusProcessamento);
-        builder.setView(dialogView);
-        final AlertDialog dialog = builder.create();
-        dialog.show();
+        createProgressDialog();
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         final Handler handler = new Handler(Looper.getMainLooper());
@@ -190,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
             @Override
             public void run() {
 
+                //inicia o single do Python
                 Python py = Python.getInstance();
                 PyObject pyobj = py.getModule("main");
                 OutputWritable activityRef = MainActivity.this;
@@ -200,7 +209,8 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.dismiss();
+                        if (dialog != null)
+                            dialog.dismiss();
                         setImageViewBitmap(imageView2, outputFilename);
                         Toast.makeText(MainActivity.this, "Contagem Realizada!", Toast.LENGTH_SHORT).show();
                     }
@@ -209,6 +219,25 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         });
     }
 
+    /**
+     * Cria o dialog que indica para o usuário que a contagem está sendo realizada
+     */
+    private void createProgressDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false); // if you want user to wait for some process to finish,
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.layout_loading_dialog, null);
+        txtStatusProcessamento = dialogView.findViewById(R.id.txtStatusProcessamento);
+        builder.setView(dialogView);
+        dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
+     * Carrega o arquivo de imagem situado no path e exibe na miniatura da tela (ImageView)
+     * @param imageView
+     * @param path
+     */
     private  void setImageViewBitmap(ImageView imageView, String path){
         Bitmap imageBitmap = null;
         try {
@@ -220,6 +249,9 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         imageView.setImageBitmap(imageBitmap);
     }
 
+    /**
+     * Inicia a activity para carregar um arquivo de imagem salvo no dispositivo
+     */
     private void loadImage(){
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
@@ -234,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         }
     }
 
+
     @Override
     public void writeOutput(final String output) {
         runOnUiThread(new Runnable() {
@@ -244,6 +277,20 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         });
     }
 
+    @Override
+    public void writeResult(final String result) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtTotalMoscas.setText(result);
+            }
+        });
+    }
+
+    /**
+     * Inicia a activity que amplia o arquivo de imagem selecionado
+     * @param path caminho do arquivo de imagem
+     */
     private void startFullscreen(String path){
         Intent intent = new Intent(MainActivity.this, FullScreenImage.class);
 
