@@ -1,17 +1,13 @@
-package com.facom.rvns.moscadochifreapp;
+package com.facom.rvns.moscadochifreapp.activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -29,10 +25,11 @@ import android.widget.Toast;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
+import com.facom.rvns.moscadochifreapp.OutputWritable;
+import com.facom.rvns.moscadochifreapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,27 +52,23 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
     private TextView txtStatusProcessamento;
     private TextView txtTotalMoscas;
     private AlertDialog dialog;
+    private File storageDir;
+    private File storageDirSource;
+    private File storageDirTarget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        imageView1 = findViewById(R.id.imageView1);
-        imageView1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startFullscreen(currentPhotoPath);
-            }
-        });
+        storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        storageDirSource = new File(storageDir, "Imagens_Capturadas");
+        storageDirTarget = new File(storageDir, "Imagens_Processadas");
 
-        imageView2 = findViewById(R.id.imageView2);
-        imageView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startFullscreen(outputFilename);
-            }
-        });
+        //cria os diretorios onde as imagens ficarao salvas
+        storageDirSource.mkdirs();
+        storageDirTarget.mkdirs();
+
 
         Button btnCapturar = findViewById(R.id.btnCapturar);
         btnCapturar.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
 
         txtTotalMoscas = findViewById(R.id.txtTotalMoscas);
 
+        loadFiles(storageDirSource.getAbsolutePath());
+
     }
 
     /**
@@ -107,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
             // Create the File where the photo should go
             File photoFile = null;
             try {
-                photoFile = createImageFile();
+                photoFile = createImageFile(storageDirSource);
             } catch (IOException ex) {
                 // Error occurred while creating the File
             }
@@ -129,14 +124,15 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         if (resultCode == RESULT_OK){
             switch (requestCode) {
                 case REQUEST_TAKE_PHOTO:
-                    startPython();
+                    //startPython();
                     break;
                 case RESULT_LOAD_IMG:
                     try {
                         // Creating file
                         File photoFile = null;
                         try {
-                            photoFile = createImageFile();
+                            photoFile = createImageFile(storageDirSource);
+                            setImageViewBitmap(photoFile);
                         } catch (IOException ex) {
                             Log.d(TAG, "Error occurred while creating the file");
                         }
@@ -152,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
                         Log.d(TAG, "onActivityResult: " + e.toString());
                     }
 
-                    startPython();
+                    //startPython();
                     break;
             }
         }
@@ -163,19 +159,22 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
      * @return
      * @throws IOException
      */
-    private File createImageFile() throws IOException {
+    private File createImageFile(File dir) throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+        File image = null;
+        try {
+            image = File.createTempFile(
+                    timeStamp,  /* prefix */
+                    ".jpg",         /* suffix */
+                    dir      /* directory */
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
+        //currentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
@@ -211,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
                     public void run() {
                         if (dialog != null)
                             dialog.dismiss();
-                        setImageViewBitmap(imageView2, outputFilename);
+                        //setImageViewBitmap(outputFilename);
                         Toast.makeText(MainActivity.this, "Contagem Realizada!", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -238,15 +237,24 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
      * @param imageView
      * @param path
      */
-    private  void setImageViewBitmap(ImageView imageView, String path){
-        Bitmap imageBitmap = null;
-        try {
-            imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse("file:///"+path));
+    private  void setImageViewBitmap(final File file){
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        LinearLayout item = (LinearLayout)findViewById(R.id.linearImagemCarregada);
+        View child = getLayoutInflater().inflate(R.layout.image_thumbnail, null);
+
+        if(file.exists()){
+
+            ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
+            imageThumbnail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startFullscreen(file.getAbsolutePath());
+                }
+            });
+
+            Picasso.with(this).load(file).fit().centerCrop().into(imageThumbnail);
         }
-        imageView.setImageBitmap(imageBitmap);
+        item.addView(child);
     }
 
     /**
@@ -298,5 +306,21 @@ public class MainActivity extends AppCompatActivity implements OutputWritable {
         extras.putString("imagebitmap", path);
         intent.putExtras(extras);
         startActivity(intent);
+    }
+
+
+    private void loadFiles(String path){
+        Log.d("Files", "Path: " + path);
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        Log.d("Files", "Size: "+ files.length);
+        for (int i = 0; i < files.length; i++)
+        {
+            if (path == storageDirSource.getAbsolutePath()){
+                Log.d("Files", "FileName:" + files[i].getName());
+                setImageViewBitmap(files[i]);
+            }
+
+        }
     }
 }
