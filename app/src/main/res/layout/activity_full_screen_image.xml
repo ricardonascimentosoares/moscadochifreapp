@@ -10,6 +10,19 @@
         android:scaleType="fitCenter" />
 
     <Button
+        android:id="@+id/btnApagar"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:textColor="#E11"
+        android:text="Apagar Foto" />
+
+    <Button
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
@@ -19,7 +32,6 @@
         android:layout_marginTop="15dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
-        android:textColor="#ffffff"
         android:text="Fechar" />
 
 </RelativeLayout>

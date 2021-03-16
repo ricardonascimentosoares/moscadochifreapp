@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
+        android:gravity="center"
         >
 
 
@@ -21,22 +22,23 @@
         android:id="@+id/btnCapturar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:text="Capturar" />
 
     <Button
         android:id="@+id/btnCarregar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:text="Carregar Imagem" />
 
-    <Button
-        android:id="@+id/btnIniciarContagem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Iniciar Contagem" />
+        <Button
+            android:id="@+id/btnContagensRealizadas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Contagens Realizadas" />
+
 
     </LinearLayout>
 
@@ -44,11 +46,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="500dp"
+        android:orientation="vertical"
     >
+        <TextView
+            android:id="@+id/textview1"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Imagens Carregadas \n(Toque na imagem para ampliar)" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#EEE"/>
         <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/linearImagemCarregada"
@@ -59,44 +72,24 @@
                 android:orientation="vertical"
 
                 >
-                <TextView
-                    android:id="@+id/textview1"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Imagens Carregadas " />
+
 
             </LinearLayout>
 
         </ScrollView>
 
-        <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
 
-        <LinearLayout
-            android:id="@+id/linearImagemProcessada"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#EEE"
-            android:layout_margin="1dp"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/textview2"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Imagens Processadas " />
-        </LinearLayout>
-
-        </ScrollView>
 
 
     </LinearLayout>
+    <Button
+        android:id="@+id/btnIniciarContagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textColor="#072"
+        android:text="Iniciar Contagem" />
 
 
 

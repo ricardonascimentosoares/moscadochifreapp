@@ -29,7 +29,7 @@ from java import cast
 
 #img = 'image/img8.jpg'
 
-def realiza_contagem(img, activity_ref):
+def realiza_contagem(img, targetDir, activity_ref):
 
     OutputWritable = jclass("com.facom.rvns.moscadochifreapp.OutputWritable")
     outputWritable = cast(OutputWritable, activity_ref)
@@ -59,7 +59,6 @@ def realiza_contagem(img, activity_ref):
     original = ler_imagem(img)
     imagem = ler_imagem(img)
 
-    msg = ""
 
     msg = "Pre-processamento..."
     # Pre processamento
@@ -116,31 +115,31 @@ def realiza_contagem(img, activity_ref):
 
     # valida(ident[3], img)         #comentado para a aplicacao mobile (nao havera validacao no aplicativo)
     # Imprime as configurações utilizadas na imagem
-    config = ['Imagem: '+str(img), 'Resolucao: '+str(original.shape), 'Suavizacao Bov: GaussianBlur '+str(suav_bov),
-              'Dilatacao: '+str(w_dilate),'Erosao: '+str(w_erode),
-              'Pixels do contorno: '+str(pix_cont),'Perimetro das bordas: '+str(perim)]
+    #config = ['Imagem: '+str(img), 'Resolucao: '+str(original.shape), 'Suavizacao Bov: GaussianBlur '+str(suav_bov),
+    #          'Dilatacao: '+str(w_dilate),'Erosao: '+str(w_erode),
+    #          'Pixels do contorno: '+str(pix_cont),'Perimetro das bordas: '+str(perim)]
 
-    config = configuracao(config)
+    #config = configuracao(config)
 
     # Converte imagens para RGB
-    original = cv2.cvtColor(original,cv2.COLOR_BGR2RGB)
-    mascara = cv2.cvtColor(mascara,cv2.COLOR_BGR2RGB)
-    resultado = cv2.cvtColor(resultad,cv2.COLOR_BGR2RGB)
-    teste1 = cv2.cvtColor(ident[2],cv2.COLOR_BGR2RGB)
+    #original = cv2.cvtColor(original,cv2.COLOR_BGR2RGB)
+    #mascara = cv2.cvtColor(mascara,cv2.COLOR_BGR2RGB)
+    #resultado = cv2.cvtColor(resultad,cv2.COLOR_BGR2RGB)
+    #teste1 = cv2.cvtColor(ident[2],cv2.COLOR_BGR2RGB)
 
-    titles = ['(1)','(2)','(3)','(4)','(5)','(6)','(7)','(8)','(9)','(10)']
-    images = [original, pre, regiao, water[0], mascara, bordas[0], bordas[1], melhora[0], teste1, resultado]
+    #titles = ['(1)','(2)','(3)','(4)','(5)','(6)','(7)','(8)','(9)','(10)']
+    #images = [original, pre, regiao, water[0], mascara, bordas[0], bordas[1], melhora[0], teste1, resultado]
 
-    for i in range(10):
-        plt.subplot(3, 4, i+1), plt.imshow(images[i], 'gray')
-        plt.title(titles[i], fontsize=8)
-        plt.xticks([]), plt.yticks([])
+    #for i in range(10):
+    #    plt.subplot(3, 4, i+1), plt.imshow(images[i], 'gray')
+    #    plt.title(titles[i], fontsize=8)
+    #    plt.xticks([]), plt.yticks([])
 
     # Path(outputPath).mkdir(parents=True, exist_ok=True)
 
-    plt.savefig(img+'_etapas.jpg', dpi=1200)
+    #plt.savefig(img+'_etapas.jpg', dpi=1200)
 
-    output_filename = img+'_resultado.jpg'
+    output_filename = targetDir + '/' + Path(img).stem +'.jpg'
 
     cv2.imwrite(output_filename, resultad)
 

@@ -2,43 +2,91 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="#CCC"
     android:gravity="center">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp">
+            android:background="#FFF"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginLeft="1dp">
 
 
         <ImageView
             android:id="@+id/imageBoi"
-            android:layout_width="80dp"
+            android:layout_width="120dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:scaleType="centerInside"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_launcher_foreground" />
 
-        <TextView
-            android:id="@+id/lbIdentificador"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:gravity="center"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ID: " />
+            >
 
-        <TextView
-            android:id="@+id/txtIdentificador"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="#04A"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                        >
+                        <TextView
+                            android:id="@+id/lbIdentificador"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="Identificador: " />
+
+                        <TextView
+                            android:id="@+id/txtIdentificador"
+                            android:layout_gravity="center"
+                            android:textSize="14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/linearMoscasIdentificadas"
+                    android:visibility="gone"
+                    >
+                        <TextView
+                            android:id="@+id/lbMoscasIdentificadas"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="Moscas Identificadas: " />
+
+                        <TextView
+                            android:id="@+id/txtMoscasIdentificadas"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="#C20"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0" />
+
+                </LinearLayout>
+        </LinearLayout>
+
 
         </LinearLayout>
+
 
 </LinearLayout>

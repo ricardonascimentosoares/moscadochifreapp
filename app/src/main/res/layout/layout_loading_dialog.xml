@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="3"
         android:layout_gravity="center"
-        android:text="Aguarde, a foto está sendo processada! Isso pode levar alguns minutos..." />
+        android:text="Aguarde, as fotos estão sendo processadas! Isso pode levar alguns minutos..." />
 
     </LinearLayout>
 
