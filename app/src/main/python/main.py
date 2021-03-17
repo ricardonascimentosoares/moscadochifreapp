@@ -38,8 +38,8 @@ def realiza_contagem(img, targetDir, activity_ref):
     # Atributos
     data = datetime.now()
     fname = data.strftime('%Y-%m-%d-%H-%M-%S')
-    inputPath = '../image/'
-    outputPath = '../resultados/'
+    #inputPath = '../image/'
+    #outputPath = '../resultados/'
 
 
     # Constantes

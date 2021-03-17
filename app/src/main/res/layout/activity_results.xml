@@ -13,6 +13,10 @@
         android:textColor="#111"
         android:textStyle="bold"
         android:textSize="22sp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#CCC" />
 
     <TextView
         android:id="@+id/textview2"
@@ -23,10 +27,63 @@
         android:layout_height="wrap_content"
         android:text="Imagens Processadas \n(Toque na imagem para ampliar)"  />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#CCC" />
+
+    <LinearLayout
+        android:id="@+id/linearProgress"
+        android:layout_marginTop="15dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="50dip"
+            android:paddingRight="50dip"
+            android:layout_gravity="center"
+            android:textColor="#999"
+            android:text="Aguarde, as fotos estão sendo processadas! Isso pode levar alguns minutos..." />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#999"
+                android:text="Fotos Restantes: " />
+
+            <TextView
+                android:id="@+id/txtStatusProcessamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#900"
+                android:textStyle="bold"
+                android:text="0" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#CCC" />
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <LinearLayout
@@ -42,8 +99,6 @@
 
     </ScrollView>
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>

@@ -20,6 +20,7 @@
 
     <Button
         android:id="@+id/btnCapturar"
+        android:drawableTop="@drawable/baseline_camera_enhance_black_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -27,6 +28,7 @@
 
     <Button
         android:id="@+id/btnCarregar"
+        android:drawableTop="@drawable/baseline_archive_black_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -34,10 +36,11 @@
 
         <Button
             android:id="@+id/btnContagensRealizadas"
+            android:drawableTop="@drawable/baseline_history_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Contagens Realizadas" />
+            android:text="Contagens" />
 
 
     </LinearLayout>
@@ -84,11 +87,11 @@
     </LinearLayout>
     <Button
         android:id="@+id/btnIniciarContagem"
+        android:drawableTop="@drawable/baseline_calculate_black_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textStyle="bold"
-        android:textColor="#072"
+        android:background="#4D6"
         android:text="Iniciar Contagem" />
 
 

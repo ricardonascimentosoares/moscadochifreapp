@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -69,6 +71,11 @@ public class MainActivity extends AppCompatActivity  {
         btnIniciarContagem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Utils.loadFiles(Utils.getStorageDirSource().getAbsolutePath()).length == 0) {
+                    Toast.makeText(MainActivity.this, "Adicione pelo menos uma imagem!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Intent i = new Intent(getBaseContext(), ResultsActivity.class);
                 i.putExtra("Tipo", ResultsActivity.INICIAR_CONTAGEM);
                 startActivity(i);
@@ -134,7 +141,7 @@ public class MainActivity extends AppCompatActivity  {
 
         View child = getLayoutInflater().inflate(R.layout.image_thumbnail, null);
 
-        ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
+        final ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
         TextView txtIdentificador = child.findViewById(R.id.txtIdentificador);
         txtIdentificador.setText(file.getName());
 
@@ -145,9 +152,19 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        Picasso.with(this).load(file).fit().centerCrop().into(imageThumbnail);
-
         linearImagemCarregada.addView(child);
+        Picasso.with(this).load(file).fit().centerCrop().into(imageThumbnail, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.i(TAG, "onSuccess: TRUE");
+            }
+
+            @Override
+            public void onError() {
+                Log.i(TAG, "onError: TRUE");
+                Picasso.with(MainActivity.this).load(file).into(imageThumbnail);
+            }
+        });
     }
 
     /**

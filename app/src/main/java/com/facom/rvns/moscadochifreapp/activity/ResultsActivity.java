@@ -1,13 +1,16 @@
 package com.facom.rvns.moscadochifreapp.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,33 +39,37 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
     private int numberOfFiles;
     private int processCounter = 0;
     private LinearLayout linearImagemProcessada;
+    private ExecutorService executor;
+    private LinearLayout linearProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        linearProgress = findViewById(R.id.linearProgress);
+        txtStatusProcessamento = findViewById(R.id.txtStatusProcessamento);
         linearImagemProcessada = findViewById(R.id.linearImagemProcessada);
 
         int type = getIntent().getIntExtra("Tipo", 0);
 
-        switch (type){
-            case INICIAR_CONTAGEM:
-                createProgressDialog();
+        addImagesToLinearLayout(Utils.getStorageDirTarget().getAbsolutePath());
 
+        if (type == INICIAR_CONTAGEM) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            //createProgressDialog();
 
-                File[] files = Utils.loadFiles(Utils.getStorageDirSource().getAbsolutePath());
-                numberOfFiles =  files.length;
+            linearProgress.setVisibility(View.VISIBLE);
 
-                for (int i = 0; i < numberOfFiles; i++) {
-                    startPython(files[i]);
-                }
+            initCounterExecution();
 
-                break;
-            case CONTAGENS_REALIZADAS:
-                addImagesToLinearLayout(Utils.getStorageDirTarget().getAbsolutePath());
-                break;
+            File[] files = Utils.loadFiles(Utils.getStorageDirSource().getAbsolutePath());
+            numberOfFiles = files.length;
+            txtStatusProcessamento.setText(String.valueOf(numberOfFiles));
 
+            for (File file : files) {
+                startPython(file);
+            }
         }
 
     }
@@ -77,21 +84,11 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
 
     }
 
-
-
     /**
      * Metodo principal que inicia a integracao do Java com Python e faz a chamada dos métodos
      */
     private void startPython(final File file){
 
-        // "context" must be an Activity, Service or Application object from your app.
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(getApplicationContext()));
-        }
-
-        //createProgressDialog();
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         final Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(new Runnable() {
             @Override
@@ -109,10 +106,14 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
                     @Override
                     public void run() {
                         processCounter++;
-                        if (dialog != null && processCounter == numberOfFiles)
-                            dialog.dismiss();
+                        txtStatusProcessamento.setText(String.valueOf(numberOfFiles-processCounter));
+
+                        if (processCounter == numberOfFiles)
+                            linearProgress.setVisibility(View.GONE);
                         setImageViewBitmap(new File(outputFilename));
                         Toast.makeText(ResultsActivity.this, "Contagem Realizada!", Toast.LENGTH_SHORT).show();
+
+                        file.delete();
                     }
                 });
             }
@@ -150,7 +151,6 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
      */
     private void setImageViewBitmap(final File file){
 
-
         View child = getLayoutInflater().inflate(R.layout.image_thumbnail, null);
 
         ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
@@ -174,5 +174,40 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
         super.onResume();
         linearImagemProcessada.removeAllViews();
         addImagesToLinearLayout(Utils.getStorageDirTarget().getAbsolutePath());
+    }
+
+
+    private void initCounterExecution(){
+        // "context" must be an Activity, Service or Application object from your app.
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(getApplicationContext()));
+        }
+
+        executor = Executors.newFixedThreadPool(3);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (linearProgress.getVisibility() == View.VISIBLE){
+            new AlertDialog.Builder(ResultsActivity.this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Contagem Em Execução!")
+                    .setMessage("Tem certeza que deseja para a contagem?")
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            executor.shutdownNow();
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("Não", null)
+                    .show();
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 }
