@@ -1,4 +1,4 @@
-package com.facom.rvns.moscadochifreapp;
+package com.facom.rvns.moscadochifreapp.interfaces;
 
 /**
  * Interface necessaria para o Python chamar um método Java
@@ -6,5 +6,5 @@ package com.facom.rvns.moscadochifreapp;
 public interface OutputWritable {
 
     void writeOutput(String output);
-    void writeResult(String result);
+    void writeResult(int result);
 }

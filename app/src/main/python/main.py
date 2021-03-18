@@ -22,7 +22,7 @@ import time
 
 from pathlib import Path
 
-from com.facom.rvns.moscadochifreapp import OutputWritable as PythonClass
+from com.facom.rvns.moscadochifreapp.interfaces import OutputWritable as PythonClass
 from java import jclass
 from java import cast
 
@@ -31,7 +31,7 @@ from java import cast
 
 def realiza_contagem(img, targetDir, activity_ref):
 
-    OutputWritable = jclass("com.facom.rvns.moscadochifreapp.OutputWritable")
+    OutputWritable = jclass("com.facom.rvns.moscadochifreapp.interfaces.OutputWritable")
     outputWritable = cast(OutputWritable, activity_ref)
 
     inicio = time.time()
@@ -111,7 +111,7 @@ def realiza_contagem(img, targetDir, activity_ref):
     total = ident[1]
     resultad = escreve(ident[0], total)
 
-    outputWritable.writeResult(str(total))
+    outputWritable.writeResult(total)
 
     # valida(ident[3], img)         #comentado para a aplicacao mobile (nao havera validacao no aplicativo)
     # Imprime as configurações utilizadas na imagem

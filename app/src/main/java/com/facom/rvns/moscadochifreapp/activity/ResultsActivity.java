@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,12 +19,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
-import com.facom.rvns.moscadochifreapp.OutputWritable;
+import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
+import com.facom.rvns.moscadochifreapp.database.Result;
+import com.facom.rvns.moscadochifreapp.interfaces.OutputWritable;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -42,6 +46,8 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
     private ExecutorService executor;
     private LinearLayout linearProgress;
 
+    private Result result;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +58,6 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
         linearImagemProcessada = findViewById(R.id.linearImagemProcessada);
 
         int type = getIntent().getIntExtra("Tipo", 0);
-
-        addImagesToLinearLayout(Utils.getStorageDirTarget().getAbsolutePath());
 
         if (type == INICIAR_CONTAGEM) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -76,11 +80,15 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
 
     @Override
     public void writeOutput(String output) {
+        String s = output;
 
     }
 
     @Override
-    public void writeResult(String result) {
+    public void writeResult(int fliesCount) {
+
+        result = new Result();
+        result.fliesCount = fliesCount;
 
     }
 
@@ -101,23 +109,35 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
                 PyObject pyResponse = pyobj.callAttr("realiza_contagem", file.getAbsolutePath(), Utils.getStorageDirTarget().getAbsolutePath(), activityRef);
 
                 final String outputFilename = pyResponse.toString();
+                saveResult(outputFilename);
+
+                processCounter++;
 
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        processCounter++;
+
                         txtStatusProcessamento.setText(String.valueOf(numberOfFiles-processCounter));
 
                         if (processCounter == numberOfFiles)
                             linearProgress.setVisibility(View.GONE);
-                        setImageViewBitmap(new File(outputFilename));
+
+
+                        setImageViewBitmap(result);
                         Toast.makeText(ResultsActivity.this, "Contagem Realizada!", Toast.LENGTH_SHORT).show();
 
+                        //apaga o arquivo de origem
                         file.delete();
                     }
                 });
             }
         });
+    }
+
+    private void saveResult(String outputFilename) {
+        result.photoPath = outputFilename;
+        result.countDate = Utils.fromDate(new Date());
+        AppDatabaseSingleton.getInstance().resultDao().insertAll(result);
     }
 
     /**
@@ -134,33 +154,47 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
         dialog.show();
     }
 
-    private void addImagesToLinearLayout(String path){
+    private void addImagesToLinearLayout(){
 
-        File[] files = Utils.loadFiles(path);
+        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAll();
 
-        for (int i = 0; i < files.length; i++)
+        for (Result result : results)
         {
-            Log.d("Files", "FileName:" + files[i].getName());
-            setImageViewBitmap(files[i]);
+            Log.d("Files", "FileName:" + result.id);
+            setImageViewBitmap(result);
         }
     }
 
     /**
      *
-     * @param file
+     * @param result
      */
-    private void setImageViewBitmap(final File file){
+    private void setImageViewBitmap(final Result result){
+
+        File file = new File(result.photoPath);
 
         View child = getLayoutInflater().inflate(R.layout.image_thumbnail, null);
 
+        LinearLayout linearMoscasIdentificadas = child.findViewById(R.id.linearMoscasIdentificadas);
+        LinearLayout linearDataContagem = child.findViewById(R.id.linearDataContagem);
+
+        linearMoscasIdentificadas.setVisibility(View.VISIBLE);
+        linearDataContagem.setVisibility(View.VISIBLE);
+
+
         ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
         TextView txtIdentificador = child.findViewById(R.id.txtIdentificador);
+        TextView txtDataContagem = child.findViewById(R.id.txtDataContagem);
+        TextView txtMoscasIdentificadas = child.findViewById(R.id.txtMoscasIdentificadas);
+
         txtIdentificador.setText(file.getName());
+        txtDataContagem.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Utils.toDate(result.countDate)));
+        txtMoscasIdentificadas.setText(String.valueOf(result.fliesCount));
 
         imageThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.startFullscreen(ResultsActivity.this, file.getAbsolutePath());
+                Utils.startFullscreen(ResultsActivity.this, result.photoPath);
             }
         });
 
@@ -173,7 +207,7 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
     protected void onResume() {
         super.onResume();
         linearImagemProcessada.removeAllViews();
-        addImagesToLinearLayout(Utils.getStorageDirTarget().getAbsolutePath());
+        addImagesToLinearLayout();
     }
 
 
@@ -183,7 +217,7 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
             Python.start(new AndroidPlatform(getApplicationContext()));
         }
 
-        executor = Executors.newFixedThreadPool(3);
+        executor = Executors.newSingleThreadExecutor();
     }
 
     @Override

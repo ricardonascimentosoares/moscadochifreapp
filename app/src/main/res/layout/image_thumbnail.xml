@@ -26,10 +26,10 @@
             android:src="@drawable/ic_launcher_foreground" />
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center"
             >
 
                 <LinearLayout
@@ -42,13 +42,38 @@
                             android:layout_gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:text="Identificador: " />
+                            android:textSize="12sp"
+                            android:text="Arquivo: " />
 
                         <TextView
                             android:id="@+id/txtIdentificador"
                             android:layout_gravity="center"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/linearDataContagem"
+                    android:visibility="gone"
+                    >
+                        <TextView
+                            android:id="@+id/lbDataContagem"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="Data Contagem: " />
+
+                        <TextView
+                            android:id="@+id/txtDataContagem"
+                            android:layout_gravity="center"
+                            android:textSize="12sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0" />
@@ -68,20 +93,22 @@
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:text="Moscas Identificadas: " />
 
                         <TextView
                             android:id="@+id/txtMoscasIdentificadas"
                             android:layout_gravity="center"
                             android:textStyle="bold"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="#C20"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0" />
 
                 </LinearLayout>
+
+
         </LinearLayout>
 
 

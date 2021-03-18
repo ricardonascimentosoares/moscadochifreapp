@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facom.rvns.moscadochifreapp.R;
+import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Utils.init(this);
+        AppDatabaseSingleton.init(getApplicationContext());
+        Utils.init(getApplicationContext());
 
         linearImagemCarregada = (LinearLayout)findViewById(R.id.linearImagemCarregada);
 
@@ -128,6 +130,13 @@ public class MainActivity extends AppCompatActivity  {
                     break;
             }
         }
+
+        //caso a captura da imagem pela camera seja cancelada
+        else{
+            //deleta o arquivo que seria a imagem
+            if (cameraFile != null)
+                cameraFile.delete();
+        }
     }
 
 
@@ -180,10 +189,10 @@ public class MainActivity extends AppCompatActivity  {
 
         File[] files = Utils.loadFiles(path);
 
-        for (int i = 0; i < files.length; i++)
+        for (File file : files)
         {
-            Log.d("Files", "FileName:" + files[i].getName());
-            setImageViewBitmap(files[i]);
+            Log.d("Files", "FileName:" + file.getName());
+            setImageViewBitmap(file);
         }
     }
 

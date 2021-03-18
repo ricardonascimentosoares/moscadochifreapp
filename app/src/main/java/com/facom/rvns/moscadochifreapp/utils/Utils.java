@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 
+import androidx.room.TypeConverter;
+
 import com.facom.rvns.moscadochifreapp.activity.FullScreenImage;
 import com.facom.rvns.moscadochifreapp.activity.MainActivity;
 
@@ -67,7 +69,7 @@ public class Utils {
      */
     public static File createImageFile(File dir)  {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         File image = null;
         try {
             image = File.createTempFile(
@@ -112,5 +114,15 @@ public class Utils {
 
     public static File getStorageDirTarget(){
         return storageDirTarget;
+    }
+
+    @TypeConverter
+    public static Date toDate(Long dateLong){
+        return dateLong == null ? null: new Date(dateLong);
+    }
+
+    @TypeConverter
+    public static Long fromDate(Date date){
+        return date == null ? null : date.getTime();
     }
 }
