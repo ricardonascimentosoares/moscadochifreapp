@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
+import com.facom.rvns.moscadochifreapp.callback.PythonCallback;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.facom.rvns.moscadochifreapp.database.Result;
 import com.facom.rvns.moscadochifreapp.interfaces.OutputWritable;
@@ -33,7 +34,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ResultsActivity extends AppCompatActivity implements OutputWritable {
+public class ResultsActivity extends AppCompatActivity  {
 
     public static final int INICIAR_CONTAGEM = 1;
     public static final int CONTAGENS_REALIZADAS = 2;
@@ -45,8 +46,7 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
     private LinearLayout linearImagemProcessada;
     private ExecutorService executor;
     private LinearLayout linearProgress;
-
-    private Result result;
+    private PyObject pyobj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,19 +78,6 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
 
     }
 
-    @Override
-    public void writeOutput(String output) {
-        String s = output;
-
-    }
-
-    @Override
-    public void writeResult(int fliesCount) {
-
-        result = new Result();
-        result.fliesCount = fliesCount;
-
-    }
 
     /**
      * Metodo principal que inicia a integracao do Java com Python e faz a chamada dos métodos
@@ -103,13 +90,17 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
             public void run() {
 
                 //inicia o single do Python
-                Python py = Python.getInstance();
-                PyObject pyobj = py.getModule("main");
-                OutputWritable activityRef = ResultsActivity.this;
-                PyObject pyResponse = pyobj.callAttr("realiza_contagem", file.getAbsolutePath(), Utils.getStorageDirTarget().getAbsolutePath(), activityRef);
+                if (pyobj == null)
+                    pyobj = Python.getInstance().getModule("main");
 
-                final String outputFilename = pyResponse.toString();
-                saveResult(outputFilename);
+                PythonCallback pythonCallback = new PythonCallback();
+                PyObject pyResponse = pyobj.callAttr("realiza_contagem", file.getAbsolutePath(), Utils.getStorageDirTarget().getAbsolutePath(), pythonCallback);
+
+                String outputFilename = pyResponse.toString();
+
+                pythonCallback.saveResult(outputFilename);
+
+                final Result result = pythonCallback.getResult();
 
                 processCounter++;
 
@@ -122,7 +113,6 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
                         if (processCounter == numberOfFiles)
                             linearProgress.setVisibility(View.GONE);
 
-
                         setImageViewBitmap(result);
                         Toast.makeText(ResultsActivity.this, "Contagem Realizada!", Toast.LENGTH_SHORT).show();
 
@@ -134,11 +124,7 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
         });
     }
 
-    private void saveResult(String outputFilename) {
-        result.photoPath = outputFilename;
-        result.countDate = Utils.fromDate(new Date());
-        AppDatabaseSingleton.getInstance().resultDao().insertAll(result);
-    }
+
 
     /**
      * Cria o dialog que indica para o usuário que a contagem está sendo realizada
@@ -217,7 +203,7 @@ public class ResultsActivity extends AppCompatActivity implements OutputWritable
             Python.start(new AndroidPlatform(getApplicationContext()));
         }
 
-        executor = Executors.newSingleThreadExecutor();
+        executor = Executors.newFixedThreadPool(2);
     }
 
     @Override

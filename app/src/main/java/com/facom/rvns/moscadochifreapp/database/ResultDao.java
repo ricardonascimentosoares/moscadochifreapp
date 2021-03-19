@@ -24,4 +24,7 @@ public interface ResultDao {
 
     @Delete
     void delete(Result result);
+
+    @Query("DELETE FROM result WHERE photo_path = :photoPath")
+    void deleteByPath(String photoPath);
 }

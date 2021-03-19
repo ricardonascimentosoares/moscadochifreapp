@@ -91,7 +91,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#4D6"
         android:text="Iniciar Contagem" />
 
 

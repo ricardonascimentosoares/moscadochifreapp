@@ -3,7 +3,7 @@
 import cv2
 from ler_imagem import ler_imagem
 from escreve_imagem import escreve
-from configuracao import configuracao
+#from configuracao import configuracao
 from boi.b_pre_processamento import b_pre_processamento
 from boi.b_regiao_interesse import regiao_interesse
 from boi.b_watershed import watershed
@@ -12,12 +12,12 @@ from mosca.m_identifica_bordas import identifica_bordas
 from mosca.m_melhora_imagem import melhora_imagem
 from mosca.m_contornos import regiao_int
 from mosca.m_identifica_mosca import identifica_mosca
-from parse_labelme_xml import valida
+#from parse_labelme_xml import valida
 
-from matplotlib import pyplot as plt
-from datetime import datetime
-from os import listdir
-from os.path import isfile, join
+#from matplotlib import pyplot as plt
+#from datetime import datetime
+#from os import listdir
+#from os.path import isfile, join
 import time
 
 from pathlib import Path
@@ -36,8 +36,8 @@ def realiza_contagem(img, targetDir, activity_ref):
 
     inicio = time.time()
     # Atributos
-    data = datetime.now()
-    fname = data.strftime('%Y-%m-%d-%H-%M-%S')
+    #data = datetime.now()
+    #fname = data.strftime('%Y-%m-%d-%H-%M-%S')
     #inputPath = '../image/'
     #outputPath = '../resultados/'
 

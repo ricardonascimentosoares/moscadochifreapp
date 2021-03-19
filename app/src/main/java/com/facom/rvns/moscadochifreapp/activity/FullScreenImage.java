@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.facom.rvns.moscadochifreapp.R;
+import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
@@ -56,8 +57,10 @@ public class FullScreenImage extends AppCompatActivity {
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(new File(path).delete())
+                                if(new File(path).delete()) {
+                                    AppDatabaseSingleton.getInstance().resultDao().deleteByPath(path);
                                     Toast.makeText(FullScreenImage.this, "Foto Apagada Com Sucesso!", Toast.LENGTH_SHORT).show();
+                                }
                                 finish();
                             }
 

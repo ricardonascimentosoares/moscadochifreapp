@@ -69,11 +69,10 @@ public class Utils {
      */
     public static File createImageFile(File dir)  {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         File image = null;
         try {
             image = File.createTempFile(
-                    timeStamp,  /* prefix */
+                    "image",  /* prefix */
                     ".jpg",         /* suffix */
                     dir      /* directory */
             );
