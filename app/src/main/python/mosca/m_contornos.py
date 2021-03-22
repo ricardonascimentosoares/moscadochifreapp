@@ -13,7 +13,8 @@ def regiao_int(imagem,img,pix):
     mask = np.zeros(thresh.shape, dtype="uint8")
 
     # Laco sobre os componentes encontrados da imagem
-    for label in np.unique(labels):
+    labels_unique = np.unique(labels)
+    for label in labels_unique:
 
         # Se este for o rótulo de fundo, ignore-o
         if label == 0: continue
@@ -35,12 +36,16 @@ def regiao_int(imagem,img,pix):
     res = cv2.bitwise_and(img, img, mask=thresh1)
     masc = res.copy()
 
+    # Eliminar ruidos de luminosidade (otimizado)
+    masc_filter = (masc > (110, 110, 110)).all(2)
+    masc[masc_filter] = (0, 0, 0)
+
     # Eliminar ruidos de luminosidade
-    for i in range(0, res.shape[0]):
-        for j in range(0, res.shape[1]):
-            (b, g, r) = res[i, j]
-            if (r > 110 and g > 110 and  b > 110):
-                masc[i, j] = (0, 0, 0)
+    #    for i in range(0, res.shape[0]):
+    #        for j in range(0, res.shape[1]):
+    #            (b, g, r) = res[i, j]
+    #            if (r > 110 and g > 110 and  b > 110):
+    #                masc[i, j] = (0, 0, 0)
 
     masc = cv2.cvtColor(masc, cv2.COLOR_BGR2GRAY)
 

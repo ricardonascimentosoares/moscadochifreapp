@@ -203,7 +203,7 @@ public class ResultsActivity extends AppCompatActivity  {
             Python.start(new AndroidPlatform(getApplicationContext()));
         }
 
-        executor = Executors.newFixedThreadPool(2);
+        executor = Executors.newFixedThreadPool(3);
     }
 
     @Override
