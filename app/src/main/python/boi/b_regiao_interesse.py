@@ -21,7 +21,7 @@ def regiao_interesse(imagem):
         if label == 0: continue
 
         # Caso contrário, construa a máscara de etiqueta
-        labelMask = np.zeros(thresh.shape, dtype="uint8")
+        labelMask = np.copy(mask)
         labelMask[labels == label] = 255
         numPixels = cv2.countNonZero(labelMask)
 

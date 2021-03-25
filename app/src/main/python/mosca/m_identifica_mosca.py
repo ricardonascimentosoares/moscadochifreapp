@@ -1,10 +1,12 @@
 import cv2
 
 def identifica_mosca(img_bovino,img,per):
-    teste = img_bovino.copy()
-    teste = cv2.cvtColor(teste, cv2.COLOR_GRAY2RGB)
+    #teste = img_bovino.copy()
+    #teste = cv2.cvtColor(teste, cv2.COLOR_GRAY2RGB)
 
-    contours, hi = cv2.findContours(img_bovino, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    #contours, hi = cv2.findContours(img_bovino, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    contours, hi = cv2.findContours(img_bovino, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
 
     # numero de objetos detectados dentro da imagem
     total = 0
@@ -22,10 +24,10 @@ def identifica_mosca(img_bovino,img,per):
         #print("per: ",perc," perime: ",perimeter)
 
         # remover partes que nao sao moscas (muito grandes)
-        if perimeter >= per[0] and perimeter < per[1] and perc > 0 and perc <= 1.9:
+        if per[0] <= perimeter < per[1] and perc > 0 and perc <= 1.9:
             ((x, y), r) = cv2.minEnclosingCircle(c)
             cv2.circle(img, (int(x), int(y)), int(r), (0, 0, 255), 2)
-            cv2.circle(teste, (int(x), int(y)), int(r), (0, 0, 255), 1)
+            #cv2.circle(teste, (int(x), int(y)), int(r), (0, 0, 255), 1)
             #print((str(total)) + ' indent: '+str(int(x))+','+str(int(y)))
             total += 1
             #print(total, " - peri: ", perimeter)
@@ -33,4 +35,4 @@ def identifica_mosca(img_bovino,img,per):
             #y = int(y)
             horn.append([int(x),int(y)])
 
-    return img, total, teste, horn
+    return img, total, horn

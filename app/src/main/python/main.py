@@ -43,11 +43,11 @@ def realiza_contagem(img, targetDir, activity_ref):
 
 
     # Constantes
-    # suav_bov = [5, 25, 25]  # Kernel para suavização da imagem do bovino
-    suav_bov = [4, 20, 20]  # Kernel para suavização da imagem do bovino
+    suav_bov = [5, 25, 25]  # Kernel para suavização da imagem do bovino
     w_erode = [3,3,1]       # Kernel e repetição para aplicação de erosão do contorno do bovino
     w_dilate = [21,21,5]    # Kernel e repetição para aplicação de dilatação do contorno do bovino
-    pix_cont = [15,70]      # Limiares de pixels de cada borda
+    #pix_cont = [15,70]      # Limiares de pixels de cada borda
+    pix_cont = [15,100]      # Limiares de pixels de cada borda
     perim = [15,45]          # Limiares do perimetro da borda identificada como mosca do chifre
 
     # onlyfiles = [f for f in listdir(inputPath) if isfile(join(inputPath, f))]

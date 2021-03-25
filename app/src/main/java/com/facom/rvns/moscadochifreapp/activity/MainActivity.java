@@ -1,8 +1,10 @@
 package com.facom.rvns.moscadochifreapp.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
@@ -37,6 +41,11 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // "context" must be an Activity, Service or Application object from your app.
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(getApplicationContext()));
+        }
 
         AppDatabaseSingleton.init(getApplicationContext());
         Utils.init(getApplicationContext());
@@ -78,9 +87,24 @@ public class MainActivity extends AppCompatActivity  {
                     return;
                 }
 
-                Intent i = new Intent(getBaseContext(), ResultsActivity.class);
-                i.putExtra("Tipo", ResultsActivity.INICIAR_CONTAGEM);
-                startActivity(i);
+                new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Iniciar Contagem?")
+                        .setMessage("Iniciar as contagem de moscas-do-chifre de todas as fotos carregadas?")
+                        .setPositiveButton("Sim", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(getBaseContext(), ResultsActivity.class);
+                                i.putExtra("Tipo", ResultsActivity.INICIAR_CONTAGEM);
+                                startActivity(i);
+                            }
+
+                        })
+                        .setNegativeButton("Não", null)
+                        .show();
+
+
             }
         });
 

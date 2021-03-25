@@ -65,7 +65,7 @@ public class ResultsActivity extends AppCompatActivity  {
 
             linearProgress.setVisibility(View.VISIBLE);
 
-            initCounterExecution();
+            executor = Executors.newFixedThreadPool(2);
 
             File[] files = Utils.loadFiles(Utils.getStorageDirSource().getAbsolutePath());
             numberOfFiles = files.length;
@@ -194,16 +194,6 @@ public class ResultsActivity extends AppCompatActivity  {
         super.onResume();
         linearImagemProcessada.removeAllViews();
         addImagesToLinearLayout();
-    }
-
-
-    private void initCounterExecution(){
-        // "context" must be an Activity, Service or Application object from your app.
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(getApplicationContext()));
-        }
-
-        executor = Executors.newFixedThreadPool(3);
     }
 
     @Override
