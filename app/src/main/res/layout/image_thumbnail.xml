@@ -30,25 +30,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:gravity="center_vertical"
             >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                        >
+                    android:gravity="left"
+                    android:id="@+id/linearIdentificador"
+                    >
                         <TextView
                             android:id="@+id/lbIdentificador"
                             android:layout_gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
-                            android:text="Arquivo: " />
+                            android:text="Identificador: " />
 
                         <TextView
                             android:id="@+id/txtIdentificador"
                             android:layout_gravity="center"
                             android:textSize="12sp"
+                            android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0" />
@@ -58,7 +61,33 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="left"
+                    android:visibility="gone"
+                        >
+                        <TextView
+                            android:id="@+id/lbArquivo"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="Arquivo: " />
+
+                        <TextView
+                            android:id="@+id/txtArquivo"
+                            android:layout_gravity="center"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0" />
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
                     android:id="@+id/linearDataContagem"
                     android:visibility="gone"
                     >
@@ -83,7 +112,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:id="@+id/linearMoscasIdentificadas"
                     android:visibility="gone"
                     >
@@ -105,6 +134,22 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    >
+                        <TextView
+                            android:id="@+id/txtProcessada"
+                            android:layout_gravity="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#081"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
 
                 </LinearLayout>
 

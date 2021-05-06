@@ -21,16 +21,24 @@ import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
+import com.facom.rvns.moscadochifreapp.database.Result;
+import com.facom.rvns.moscadochifreapp.dialog.InsertInfoDialog;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity  implements InsertInfoDialog.NoticeDialogListener {
 
     public static final int REQUEST_TAKE_PHOTO = 1;
     public static final int RESULT_LOAD_IMG = 2;
+
+    public static final int RESULT_CONTAGEM_REALIZADA = 3;
+    public static final int RESULT_INICIAR_CONTAGEM = 4;
+
+
     public static final String TAG = "MainActivity";
 
     private File cameraFile;
@@ -74,7 +82,7 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(), ResultsActivity.class);
                 i.putExtra("Tipo", ResultsActivity.CONTAGENS_REALIZADAS);
-                startActivity(i);
+                startActivityForResult(i, RESULT_CONTAGEM_REALIZADA);
             }
         });
 
@@ -82,7 +90,7 @@ public class MainActivity extends AppCompatActivity  {
         btnIniciarContagem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Utils.loadFiles(Utils.getStorageDirSource().getAbsolutePath()).length == 0) {
+                if (AppDatabaseSingleton.getInstance().resultDao().getAllNotProcessed().size() == 0) {
                     Toast.makeText(MainActivity.this, "Adicione pelo menos uma imagem!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -97,7 +105,7 @@ public class MainActivity extends AppCompatActivity  {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent i = new Intent(getBaseContext(), ResultsActivity.class);
                                 i.putExtra("Tipo", ResultsActivity.INICIAR_CONTAGEM);
-                                startActivity(i);
+                                startActivityForResult(i, RESULT_INICIAR_CONTAGEM);
                             }
 
                         })
@@ -110,7 +118,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
         //carrega as imagens e adiciona a listagem
-        addImagesToLinearLayout(Utils.getStorageDirSource().getAbsolutePath());
+        addImagesToLinearLayout();
 
     }
 
@@ -140,27 +148,22 @@ public class MainActivity extends AppCompatActivity  {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
-            switch (requestCode) {
-                case REQUEST_TAKE_PHOTO:
-                    setImageViewBitmap(cameraFile);
-                    break;
-                case RESULT_LOAD_IMG:
 
-                    File photoFile = Utils.createImageFile(Utils.getStorageDirSource());
-                    Utils.copyStream(this, data.getData(), photoFile);
+            InsertInfoDialog insertInfoDialog = new InsertInfoDialog(requestCode, data);
+            insertInfoDialog.show(getSupportFragmentManager(), "DIALOG");
+        }
 
-                    setImageViewBitmap(photoFile);
-
-                    break;
-            }
+        else if (resultCode == FullScreenImage.DELETE || requestCode == RESULT_CONTAGEM_REALIZADA || requestCode == RESULT_INICIAR_CONTAGEM){
+            linearImagemCarregada.removeAllViews();
+            addImagesToLinearLayout();
         }
 
         //caso a captura da imagem pela camera seja cancelada
-        else{
-            //deleta o arquivo que seria a imagem
-            if (cameraFile != null)
-                cameraFile.delete();
-        }
+        //else{
+        //    //deleta o arquivo que seria a imagem
+        //    if (cameraFile != null)
+        //        cameraFile.delete();
+        //}
     }
 
 
@@ -169,19 +172,27 @@ public class MainActivity extends AppCompatActivity  {
      * @param imageView
      * @param path
      */
-    private void setImageViewBitmap(final File file){
+    private void setImageViewBitmap(final Result result){
 
+        final File file = new File(result.photoPath);
 
         View child = getLayoutInflater().inflate(R.layout.image_thumbnail, null);
 
         final ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
+        TextView txtArquivo = child.findViewById(R.id.txtArquivo);
         TextView txtIdentificador = child.findViewById(R.id.txtIdentificador);
-        txtIdentificador.setText(file.getName());
+        TextView txtProcessada = child.findViewById(R.id.txtProcessada);
+        txtArquivo.setText(file.getName());
+        txtIdentificador.setText(result.identification);
+
+        if (result.indProcessado == 1) {
+            txtProcessada.setText("Processada!");
+        }
 
         imageThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.startFullscreen(MainActivity.this, file.getAbsolutePath());
+                Utils.startFullscreen(MainActivity.this, result);
             }
         });
 
@@ -209,21 +220,43 @@ public class MainActivity extends AppCompatActivity  {
         startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
     }
 
-    private void addImagesToLinearLayout(String path){
+    private void addImagesToLinearLayout(){
 
-        File[] files = Utils.loadFiles(path);
+        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAll();
 
-        for (File file : files)
+        for (Result result : results)
         {
-            Log.d("Files", "FileName:" + file.getName());
-            setImageViewBitmap(file);
+            Log.d("Files", "FileName:" + result.id);
+            setImageViewBitmap(result);
         }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        linearImagemCarregada.removeAllViews();
-        addImagesToLinearLayout(Utils.getStorageDirSource().getAbsolutePath());
+    public void onDialogPositiveClick(String strCowIdentification, int requestCode, Intent data) {
+
+        Result result = new Result();
+        result.identification = strCowIdentification;
+
+
+        switch (requestCode) {
+
+            case REQUEST_TAKE_PHOTO:
+                result.photoPath = cameraFile.getAbsolutePath();
+                AppDatabaseSingleton.getInstance().resultDao().insertAll(result);
+
+                setImageViewBitmap(result);
+                break;
+            case RESULT_LOAD_IMG:
+
+                File photoFile = Utils.createImageFile(Utils.getStorageDirSource());
+                Utils.copyStream(this, data.getData(), photoFile);
+
+                result.photoPath = photoFile.getAbsolutePath();
+                AppDatabaseSingleton.getInstance().resultDao().insertAll(result);
+
+                setImageViewBitmap(result);
+
+                break;
+        }
     }
 }

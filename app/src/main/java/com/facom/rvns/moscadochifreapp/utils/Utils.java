@@ -1,5 +1,6 @@
 package com.facom.rvns.moscadochifreapp.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,7 +11,9 @@ import android.util.Log;
 import androidx.room.TypeConverter;
 
 import com.facom.rvns.moscadochifreapp.activity.FullScreenImage;
+import com.facom.rvns.moscadochifreapp.activity.FullScreenImageProcessed;
 import com.facom.rvns.moscadochifreapp.activity.MainActivity;
+import com.facom.rvns.moscadochifreapp.database.Result;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -95,16 +98,23 @@ public class Utils {
     }
 
     /**
-     * Inicia a activity que amplia o arquivo de imagem selecionado
-     * @param path caminho do arquivo de imagem
+     *
+     * @param context
+     * @param result
      */
-    public static void startFullscreen(Context context, String path){
-        Intent intent = new Intent(context, FullScreenImage.class);
+    public static void startFullscreen(Activity context, Result result){
+        Intent intent;
+        if (context instanceof MainActivity) {
+            intent = new Intent(context, FullScreenImage.class);
+        }
+        else{
+            intent = new Intent(context, FullScreenImageProcessed.class);
+        }
 
         Bundle extras = new Bundle();
-        extras.putString("imagebitmap", path);
+        extras.putSerializable("result", result);
         intent.putExtras(extras);
-        context.startActivity(intent);
+        context.startActivityForResult(intent, FullScreenImage.DELETE);
     }
 
     public static File getStorageDirSource(){

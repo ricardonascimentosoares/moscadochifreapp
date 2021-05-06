@@ -1,6 +1,7 @@
 package com.facom.rvns.moscadochifreapp.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,23 +14,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
 import com.facom.rvns.moscadochifreapp.callback.PythonCallback;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.facom.rvns.moscadochifreapp.database.Result;
-import com.facom.rvns.moscadochifreapp.interfaces.OutputWritable;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -67,14 +66,17 @@ public class ResultsActivity extends AppCompatActivity  {
 
             executor = Executors.newFixedThreadPool(2);
 
-            File[] files = Utils.loadFiles(Utils.getStorageDirSource().getAbsolutePath());
-            numberOfFiles = files.length;
+            List<Result> resultsNotProcessed = AppDatabaseSingleton.getInstance().resultDao().getAllNotProcessed();
+
+            numberOfFiles = resultsNotProcessed.size();
             txtStatusProcessamento.setText(String.valueOf(numberOfFiles));
 
-            for (File file : files) {
-                startPython(file);
+            for (Result result : resultsNotProcessed) {
+                startPython(result);
             }
         }
+
+        addImagesToLinearLayout();
 
     }
 
@@ -82,7 +84,7 @@ public class ResultsActivity extends AppCompatActivity  {
     /**
      * Metodo principal que inicia a integracao do Java com Python e faz a chamada dos métodos
      */
-    private void startPython(final File file){
+    private void startPython(final Result result){
 
         final Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(new Runnable() {
@@ -93,8 +95,8 @@ public class ResultsActivity extends AppCompatActivity  {
                 if (pyobj == null)
                     pyobj = Python.getInstance().getModule("main");
 
-                PythonCallback pythonCallback = new PythonCallback();
-                PyObject pyResponse = pyobj.callAttr("realiza_contagem", file.getAbsolutePath(), Utils.getStorageDirTarget().getAbsolutePath(), pythonCallback);
+                PythonCallback pythonCallback = new PythonCallback(result);
+                PyObject pyResponse = pyobj.callAttr("realiza_contagem", result.photoPath, Utils.getStorageDirTarget().getAbsolutePath(), pythonCallback);
 
                 String outputFilename = pyResponse.toString();
 
@@ -117,7 +119,7 @@ public class ResultsActivity extends AppCompatActivity  {
                         Toast.makeText(ResultsActivity.this, "Contagem Realizada!", Toast.LENGTH_SHORT).show();
 
                         //apaga o arquivo de origem
-                        file.delete();
+                        //file.delete();
                     }
                 });
             }
@@ -142,7 +144,7 @@ public class ResultsActivity extends AppCompatActivity  {
 
     private void addImagesToLinearLayout(){
 
-        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAll();
+        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAllProcessed();
 
         for (Result result : results)
         {
@@ -157,7 +159,7 @@ public class ResultsActivity extends AppCompatActivity  {
      */
     private void setImageViewBitmap(final Result result){
 
-        File file = new File(result.photoPath);
+        File file = new File(result.photoProcessedPath);
 
         View child = getLayoutInflater().inflate(R.layout.image_thumbnail, null);
 
@@ -169,18 +171,20 @@ public class ResultsActivity extends AppCompatActivity  {
 
 
         ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
-        TextView txtIdentificador = child.findViewById(R.id.txtIdentificador);
+        TextView txtArquivo = child.findViewById(R.id.txtArquivo);
         TextView txtDataContagem = child.findViewById(R.id.txtDataContagem);
         TextView txtMoscasIdentificadas = child.findViewById(R.id.txtMoscasIdentificadas);
+        TextView txtIdentificador = child.findViewById(R.id.txtIdentificador);
 
-        txtIdentificador.setText(file.getName());
+        txtArquivo.setText(file.getName());
+        txtIdentificador.setText(result.identification);
         txtDataContagem.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Utils.toDate(result.countDate)));
         txtMoscasIdentificadas.setText(String.valueOf(result.fliesCount));
 
         imageThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.startFullscreen(ResultsActivity.this, result.photoPath);
+                Utils.startFullscreen(ResultsActivity.this, result);
             }
         });
 
@@ -189,12 +193,6 @@ public class ResultsActivity extends AppCompatActivity  {
         linearImagemProcessada.addView(child);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        linearImagemProcessada.removeAllViews();
-        addImagesToLinearLayout();
-    }
 
     @Override
     public void onBackPressed() {
@@ -218,6 +216,16 @@ public class ResultsActivity extends AppCompatActivity  {
         }
         else{
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == FullScreenImage.DELETE){
+            linearImagemProcessada.removeAllViews();
+            addImagesToLinearLayout();
         }
     }
 }

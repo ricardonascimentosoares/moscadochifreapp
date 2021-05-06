@@ -18,6 +18,7 @@
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.FullScreenImage"></activity>
+        <activity android:name=".activity.FullScreenImageProcessed"></activity>
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

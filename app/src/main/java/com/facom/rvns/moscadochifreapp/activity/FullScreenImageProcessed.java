@@ -1,10 +1,5 @@
 package com.facom.rvns.moscadochifreapp.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +11,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.facom.rvns.moscadochifreapp.database.Result;
@@ -23,11 +21,12 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class FullScreenImage extends AppCompatActivity {
+public class FullScreenImageProcessed extends AppCompatActivity {
 
-    private Result result;
     public static final int DELETE =  7;
+    private Result result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class FullScreenImage extends AppCompatActivity {
         Button btnClose = findViewById(R.id.btnClose);
         btnClose.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                FullScreenImage.this.finish();
+                FullScreenImageProcessed.this.finish();
             }
         });
 
@@ -54,21 +53,20 @@ public class FullScreenImage extends AppCompatActivity {
         btnApagar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(FullScreenImage.this)
+                new AlertDialog.Builder(FullScreenImageProcessed.this)
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Apagar Foto")
-                        .setMessage("Tem certeza que deseja apagar essa foto?")
+                        .setTitle("Apagar Contagem")
+                        .setMessage("Tem certeza que deseja apagar essa contagem?")
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener()
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                AppDatabaseSingleton.getInstance().resultDao().delete(result);
-                                new File(result.photoPath).delete();
+                                result.removeCount();
+                                AppDatabaseSingleton.getInstance().resultDao().update(result);
+                                Toast.makeText(FullScreenImageProcessed.this, "Contagem Apagada Com Sucesso!", Toast.LENGTH_SHORT).show();
 
-
-                                Toast.makeText(FullScreenImage.this, "Foto Apagada Com Sucesso!", Toast.LENGTH_SHORT).show();
                                 Intent returnIntent = new Intent();
-                                setResult(FullScreenImage.DELETE,returnIntent);
+                                setResult(FullScreenImageProcessed.DELETE,returnIntent);
                                 finish();
                             }
 
@@ -79,7 +77,7 @@ public class FullScreenImage extends AppCompatActivity {
         });
 
         try {
-            imgDisplay.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse("file:///"+result.photoPath)));
+            imgDisplay.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse("file:///"+result.photoProcessedPath)));
         } catch (IOException e) {
             e.printStackTrace();
         }

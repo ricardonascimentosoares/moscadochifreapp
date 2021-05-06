@@ -11,6 +11,10 @@ public class PythonCallback implements OutputWritable {
 
     private Result result;
 
+    public PythonCallback (Result result){
+        this.result = result;
+    }
+
     @Override
     public void writeOutput(String output) {
         String s = output;
@@ -20,7 +24,6 @@ public class PythonCallback implements OutputWritable {
     @Override
     public void writeResult(int fliesCount) {
 
-        result = new Result();
         result.fliesCount = fliesCount;
 
     }
@@ -30,8 +33,9 @@ public class PythonCallback implements OutputWritable {
     }
 
     public void saveResult(String outputFilename) {
-        result.photoPath = outputFilename;
+        result.photoProcessedPath = outputFilename;
         result.countDate = Utils.fromDate(new Date());
-        AppDatabaseSingleton.getInstance().resultDao().insertAll(result);
+        result.indProcessado = 1;
+        AppDatabaseSingleton.getInstance().resultDao().update(result);
     }
 }

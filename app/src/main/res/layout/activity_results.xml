@@ -6,19 +6,6 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Resultados"
-        android:textColor="#111"
-        android:textStyle="bold"
-        android:textSize="22sp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="#CCC" />
-
-    <TextView
         android:id="@+id/textview2"
         android:layout_margin="10dp"
         android:gravity="center"
