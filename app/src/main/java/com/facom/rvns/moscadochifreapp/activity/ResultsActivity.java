@@ -22,7 +22,7 @@ import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.facom.rvns.moscadochifreapp.callback.PythonCallback;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
-import com.facom.rvns.moscadochifreapp.database.Result;
+import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
 import com.squareup.picasso.Picasso;

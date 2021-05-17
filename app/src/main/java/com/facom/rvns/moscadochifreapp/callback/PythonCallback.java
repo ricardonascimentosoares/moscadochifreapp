@@ -1,7 +1,7 @@
 package com.facom.rvns.moscadochifreapp.callback;
 
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
-import com.facom.rvns.moscadochifreapp.database.Result;
+import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.facom.rvns.moscadochifreapp.interfaces.OutputWritable;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
 

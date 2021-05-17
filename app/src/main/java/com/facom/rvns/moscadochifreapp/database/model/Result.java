@@ -1,4 +1,4 @@
-package com.facom.rvns.moscadochifreapp.database;
+package com.facom.rvns.moscadochifreapp.database.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -37,6 +37,9 @@ public class Result implements Serializable {
 
     @ColumnInfo(name = "ind_processado")
     public int indProcessado = 0;
+
+    @ColumnInfo(name = "count_id")
+    public int countId;
 
 
     public void removeCount(){

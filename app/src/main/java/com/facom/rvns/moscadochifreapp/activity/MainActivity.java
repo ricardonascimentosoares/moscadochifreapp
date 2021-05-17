@@ -21,7 +21,7 @@ import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
-import com.facom.rvns.moscadochifreapp.database.Result;
+import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.facom.rvns.moscadochifreapp.dialog.InsertInfoDialog;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
 import com.squareup.picasso.Callback;

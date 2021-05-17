@@ -13,14 +13,13 @@ import androidx.room.TypeConverter;
 import com.facom.rvns.moscadochifreapp.activity.FullScreenImage;
 import com.facom.rvns.moscadochifreapp.activity.FullScreenImageProcessed;
 import com.facom.rvns.moscadochifreapp.activity.MainActivity;
-import com.facom.rvns.moscadochifreapp.database.Result;
+import com.facom.rvns.moscadochifreapp.database.model.Result;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utils {

@@ -1,10 +1,12 @@
-package com.facom.rvns.moscadochifreapp.database;
+package com.facom.rvns.moscadochifreapp.database.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.facom.rvns.moscadochifreapp.database.model.Result;
 
 import java.util.List;
 
@@ -40,4 +42,7 @@ public interface ResultDao {
 
     @Update
     int update(Result result);
+
+    @Query("SELECT * FROM result WHERE count_id IN (:countId)")
+    List<Result> getResultByCountId(int countId);
 }

@@ -16,12 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
-import com.facom.rvns.moscadochifreapp.database.Result;
+import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.github.chrisbanes.photoview.PhotoView;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 
 public class FullScreenImageProcessed extends AppCompatActivity {
 

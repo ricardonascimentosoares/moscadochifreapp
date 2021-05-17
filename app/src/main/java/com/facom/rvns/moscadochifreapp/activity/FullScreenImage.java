@@ -1,9 +1,7 @@
 package com.facom.rvns.moscadochifreapp.activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +16,7 @@ import android.widget.Toast;
 
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
-import com.facom.rvns.moscadochifreapp.database.Result;
+import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
