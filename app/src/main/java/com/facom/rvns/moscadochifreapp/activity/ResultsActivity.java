@@ -185,7 +185,7 @@ public class ResultsActivity extends AppCompatActivity  {
         TextView txtMoscasIdentificadas = child.findViewById(R.id.txtMoscasIdentificadas);
 
         txtIdentificador.setText(file.getName());
-        txtDataContagem.setText(new SimpleDateFormat("DD/MM/yyyy HH24:mm:ss").format(Utils.toDate(result.countDate)));
+        txtDataContagem.setText(Utils.toDateFormat(result.countDate));
         txtMoscasIdentificadas.setText(String.valueOf(result.fliesCount));
 
         imageThumbnail.setOnClickListener(new View.OnClickListener() {

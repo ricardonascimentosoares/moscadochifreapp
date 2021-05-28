@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
@@ -59,8 +60,9 @@ public class FullScreenImageProcessed extends AppCompatActivity {
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                result.deleteImageProcessed();
-                                AppDatabaseSingleton.getInstance().resultDao().update(result);
+
+                                MoscaDoChifreAppSingleton.getInstance().deleteResultProcessed(result);
+
                                 Toast.makeText(FullScreenImageProcessed.this, "Contagem Apagada Com Sucesso!", Toast.LENGTH_SHORT).show();
 
                                 Intent returnIntent = new Intent();

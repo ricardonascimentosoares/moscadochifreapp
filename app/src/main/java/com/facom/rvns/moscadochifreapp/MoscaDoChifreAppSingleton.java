@@ -143,4 +143,19 @@ public class MoscaDoChifreAppSingleton {
         AppDatabaseSingleton.getInstance().countDao().delete(count);
 
     }
+
+
+    public void deleteResult(Result result){
+        result.deleteImages();
+        AppDatabaseSingleton.getInstance().resultDao().delete(result);
+
+        calculateAVG();
+    }
+
+    public void deleteResultProcessed(Result result){
+        result.deleteImageProcessed();
+        AppDatabaseSingleton.getInstance().resultDao().update(result);
+
+        calculateAVG();
+    }
 }

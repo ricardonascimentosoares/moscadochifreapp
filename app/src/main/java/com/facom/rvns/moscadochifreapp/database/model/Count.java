@@ -31,8 +31,7 @@ public class Count {
     @Override
     public String toString() {
         return "\n Contagem: " + (name.equals("") ? "Sem identificação" : name)  + '\n'+
-                " Data de Início: " + Utils.toDateFormat(countDate) + '\n'+
-                " Média de moscas encontradas = " + averageFliesCount ;
+                " Data de Início: " + Utils.toDateFormat(countDate) + '\n';
     }
 
 

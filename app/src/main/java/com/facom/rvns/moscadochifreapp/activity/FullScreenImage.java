@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
@@ -60,8 +61,9 @@ public class FullScreenImage extends AppCompatActivity {
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                result.deleteImages();
-                                AppDatabaseSingleton.getInstance().resultDao().delete(result);
+
+
+                                MoscaDoChifreAppSingleton.getInstance().deleteResult(result);
 
                                 Toast.makeText(FullScreenImage.this, "Foto Apagada Com Sucesso!", Toast.LENGTH_SHORT).show();
                                 Intent returnIntent = new Intent();
