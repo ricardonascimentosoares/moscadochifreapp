@@ -18,6 +18,9 @@ public interface CountDao {
     List<Count> getAll();
 
     @Insert
+    long insert(Count count);
+
+    @Insert
     void insertAll(Count... counts);
 
     @Delete

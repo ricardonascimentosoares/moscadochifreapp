@@ -20,10 +20,10 @@ public interface ResultDao {
     List<Result> getAllByIds(int[] resultsId);
 
     @Query("SELECT * FROM result WHERE ind_processado = 0")
-    List<Result> getAllNotProcessed();
+    List<Result> getAllResultsNotProcessed();
 
     @Query("SELECT * FROM result WHERE ind_processado = 1")
-    List<Result> getAllProcessed();
+    List<Result> getAllResultsProcessed();
 
     @Query("SELECT * FROM result WHERE photo_path = :photoPath")
     Result getByPath(String photoPath);
@@ -44,5 +44,15 @@ public interface ResultDao {
     int update(Result result);
 
     @Query("SELECT * FROM result WHERE count_id IN (:countId)")
-    List<Result> getResultByCountId(int countId);
+    List<Result> getAllResultsByCountId(int countId);
+
+    @Query("SELECT * FROM result WHERE ind_processado = 0 AND count_id = :countId")
+    List<Result> getAllResultsNotProcessedByCountId(int countId);
+
+    @Query("SELECT * FROM result WHERE ind_processado = 1 AND count_id = :countId")
+    List<Result> getAllResultsProcessedByCountId(int countId);
+
+
+    @Query("DELETE FROM result WHERE count_id = :countId")
+    void deleteByCountId(int countId);
 }

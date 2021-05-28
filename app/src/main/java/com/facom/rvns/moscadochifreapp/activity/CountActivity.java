@@ -17,8 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
+import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
@@ -30,7 +29,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity  implements InsertInfoDialog.NoticeDialogListener {
+public class CountActivity extends AppCompatActivity  implements InsertInfoDialog.InsertInfoDialogListener {
 
     public static final int REQUEST_TAKE_PHOTO = 1;
     public static final int RESULT_LOAD_IMG = 2;
@@ -43,22 +42,17 @@ public class MainActivity extends AppCompatActivity  implements InsertInfoDialog
 
     private File cameraFile;
     private LinearLayout linearImagemCarregada;
+    private TextView txtNomeContagem;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // "context" must be an Activity, Service or Application object from your app.
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(getApplicationContext()));
-        }
-
-        AppDatabaseSingleton.init(getApplicationContext());
-        Utils.init(getApplicationContext());
+        setContentView(R.layout.activity_count);
 
         linearImagemCarregada = (LinearLayout)findViewById(R.id.linearImagemCarregada);
+        txtNomeContagem = (TextView)findViewById(R.id.txtNomeContagem);
+        txtNomeContagem.setText(MoscaDoChifreAppSingleton.getInstance().getCountSelected().name.equals("")  ? txtNomeContagem.getText() : MoscaDoChifreAppSingleton.getInstance().getCountSelected().name) ;
 
         Button btnCapturar = findViewById(R.id.btnCapturar);
         btnCapturar.setOnClickListener(new View.OnClickListener() {
@@ -90,15 +84,15 @@ public class MainActivity extends AppCompatActivity  implements InsertInfoDialog
         btnIniciarContagem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AppDatabaseSingleton.getInstance().resultDao().getAllNotProcessed().size() == 0) {
-                    Toast.makeText(MainActivity.this, "Adicione pelo menos uma imagem!", Toast.LENGTH_SHORT).show();
+                if (MoscaDoChifreAppSingleton.getInstance().getCountResultsNotProcessed().size() == 0) {
+                    Toast.makeText(CountActivity.this, "Adicione pelo menos uma imagem!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                new AlertDialog.Builder(MainActivity.this)
+                new AlertDialog.Builder(CountActivity.this)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Iniciar Contagem?")
-                        .setMessage("Iniciar as contagem de moscas-do-chifre de todas as fotos carregadas?")
+                        .setMessage("Iniciar as contagem de moscas-dos-chifres de todas as fotos carregadas?")
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener()
                         {
                             @Override
@@ -130,7 +124,7 @@ public class MainActivity extends AppCompatActivity  implements InsertInfoDialog
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
-            cameraFile = Utils.createImageFile(Utils.getStorageDirSource());
+            cameraFile = Utils.createImageFile(MoscaDoChifreAppSingleton.getInstance().getStorageDirSource());
 
             // Continue only if the File was successfully created
             if (cameraFile != null) {
@@ -167,11 +161,6 @@ public class MainActivity extends AppCompatActivity  implements InsertInfoDialog
     }
 
 
-    /**
-     * Carrega o arquivo de imagem situado no path e exibe na miniatura da tela (ImageView)
-     * @param imageView
-     * @param path
-     */
     private void setImageViewBitmap(final Result result){
 
         final File file = new File(result.photoPath);
@@ -192,7 +181,7 @@ public class MainActivity extends AppCompatActivity  implements InsertInfoDialog
         imageThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.startFullscreen(MainActivity.this, result);
+                Utils.startFullscreen(CountActivity.this, result);
             }
         });
 
@@ -206,7 +195,7 @@ public class MainActivity extends AppCompatActivity  implements InsertInfoDialog
             @Override
             public void onError() {
                 Log.i(TAG, "onError: TRUE");
-                Picasso.with(MainActivity.this).load(file).into(imageThumbnail);
+                Picasso.with(CountActivity.this).load(file).into(imageThumbnail);
             }
         });
     }
@@ -222,10 +211,9 @@ public class MainActivity extends AppCompatActivity  implements InsertInfoDialog
 
     private void addImagesToLinearLayout(){
 
-        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAll();
+        List<Result> results = MoscaDoChifreAppSingleton.getInstance().getCountResults();
 
-        for (Result result : results)
-        {
+        for (Result result : results) {
             Log.d("Files", "FileName:" + result.id);
             setImageViewBitmap(result);
         }
@@ -237,26 +225,19 @@ public class MainActivity extends AppCompatActivity  implements InsertInfoDialog
         Result result = new Result();
         result.identification = strCowIdentification;
 
-
         switch (requestCode) {
 
             case REQUEST_TAKE_PHOTO:
                 result.photoPath = cameraFile.getAbsolutePath();
-                AppDatabaseSingleton.getInstance().resultDao().insertAll(result);
-
-                setImageViewBitmap(result);
                 break;
             case RESULT_LOAD_IMG:
 
-                File photoFile = Utils.createImageFile(Utils.getStorageDirSource());
+                File photoFile = Utils.createImageFile(MoscaDoChifreAppSingleton.getInstance().getStorageDirSource());
                 Utils.copyStream(this, data.getData(), photoFile);
-
                 result.photoPath = photoFile.getAbsolutePath();
-                AppDatabaseSingleton.getInstance().resultDao().insertAll(result);
-
-                setImageViewBitmap(result);
-
                 break;
         }
+        MoscaDoChifreAppSingleton.getInstance().insertResult(result);
+        setImageViewBitmap(result);
     }
 }

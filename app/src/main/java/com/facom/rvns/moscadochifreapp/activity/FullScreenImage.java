@@ -60,9 +60,8 @@ public class FullScreenImage extends AppCompatActivity {
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                result.deleteImages();
                                 AppDatabaseSingleton.getInstance().resultDao().delete(result);
-                                new File(result.photoPath).delete();
-
 
                                 Toast.makeText(FullScreenImage.this, "Foto Apagada Com Sucesso!", Toast.LENGTH_SHORT).show();
                                 Intent returnIntent = new Intent();

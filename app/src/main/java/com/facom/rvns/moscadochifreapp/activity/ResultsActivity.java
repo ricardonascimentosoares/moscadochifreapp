@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
+import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.callback.PythonCallback;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
@@ -46,6 +47,9 @@ public class ResultsActivity extends AppCompatActivity  {
     private ExecutorService executor;
     private LinearLayout linearProgress;
     private PyObject pyobj;
+    private TextView txtContagem;
+    private TextView txtMediaGeral;
+    private TextView txtDataContagem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,9 @@ public class ResultsActivity extends AppCompatActivity  {
         linearProgress = findViewById(R.id.linearProgress);
         txtStatusProcessamento = findViewById(R.id.txtStatusProcessamento);
         linearImagemProcessada = findViewById(R.id.linearImagemProcessada);
+        txtContagem = findViewById(R.id.txtContagem);
+        txtMediaGeral = findViewById(R.id.txtMediaGeral);
+        txtDataContagem = findViewById(R.id.txtDataContagem);
 
         int type = getIntent().getIntExtra("Tipo", 0);
 
@@ -66,7 +73,7 @@ public class ResultsActivity extends AppCompatActivity  {
 
             executor = Executors.newFixedThreadPool(2);
 
-            List<Result> resultsNotProcessed = AppDatabaseSingleton.getInstance().resultDao().getAllNotProcessed();
+            List<Result> resultsNotProcessed = MoscaDoChifreAppSingleton.getInstance().getCountResultsNotProcessed();
 
             numberOfFiles = resultsNotProcessed.size();
             txtStatusProcessamento.setText(String.valueOf(numberOfFiles));
@@ -77,7 +84,6 @@ public class ResultsActivity extends AppCompatActivity  {
         }
 
         addImagesToLinearLayout();
-
     }
 
 
@@ -95,14 +101,12 @@ public class ResultsActivity extends AppCompatActivity  {
                 if (pyobj == null)
                     pyobj = Python.getInstance().getModule("main");
 
-                PythonCallback pythonCallback = new PythonCallback(result);
-                PyObject pyResponse = pyobj.callAttr("realiza_contagem", result.photoPath, Utils.getStorageDirTarget().getAbsolutePath(), pythonCallback);
+                PythonCallback pythonCallback = new PythonCallback();
+                PyObject pyResponse = pyobj.callAttr("realiza_contagem", result.photoPath, MoscaDoChifreAppSingleton.getInstance().getStorageDirTarget().getAbsolutePath(), pythonCallback);
 
-                String outputFilename = pyResponse.toString();
-
-                pythonCallback.saveResult(outputFilename);
-
-                final Result result = pythonCallback.getResult();
+                result.photoProcessedPath = pyResponse.toString();
+                result.fliesCount = pythonCallback.getFliesCount();
+                final Result resultProcessed = MoscaDoChifreAppSingleton.getInstance().processResult(result);
 
                 processCounter++;
 
@@ -112,10 +116,13 @@ public class ResultsActivity extends AppCompatActivity  {
 
                         txtStatusProcessamento.setText(String.valueOf(numberOfFiles-processCounter));
 
-                        if (processCounter == numberOfFiles)
+                        if (processCounter == numberOfFiles) {
                             linearProgress.setVisibility(View.GONE);
+                            int media = MoscaDoChifreAppSingleton.getInstance().calculateAVG();
+                            txtMediaGeral.setText(String.valueOf(media));
+                        }
 
-                        setImageViewBitmap(result);
+                        setImageViewBitmap(resultProcessed);
                         Toast.makeText(ResultsActivity.this, "Contagem Realizada!", Toast.LENGTH_SHORT).show();
 
                         //apaga o arquivo de origem
@@ -144,10 +151,13 @@ public class ResultsActivity extends AppCompatActivity  {
 
     private void addImagesToLinearLayout(){
 
-        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAllProcessed();
+        txtContagem.setText(MoscaDoChifreAppSingleton.getInstance().getCountSelected().name.equals("")  ? txtContagem.getText() : MoscaDoChifreAppSingleton.getInstance().getCountSelected().name) ;
+        txtMediaGeral.setText(String.valueOf(MoscaDoChifreAppSingleton.getInstance().getCountSelected().averageFliesCount));
+        txtDataContagem.setText(Utils.toDateFormat(MoscaDoChifreAppSingleton.getInstance().getCountSelected().countDate));
 
-        for (Result result : results)
-        {
+        List<Result> results = MoscaDoChifreAppSingleton.getInstance().getCountResultsProcessed();
+
+        for (Result result : results) {
             Log.d("Files", "FileName:" + result.id);
             setImageViewBitmap(result);
         }
@@ -169,16 +179,13 @@ public class ResultsActivity extends AppCompatActivity  {
         linearMoscasIdentificadas.setVisibility(View.VISIBLE);
         linearDataContagem.setVisibility(View.VISIBLE);
 
-
         ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
-        TextView txtArquivo = child.findViewById(R.id.txtArquivo);
+        TextView txtIdentificador = child.findViewById(R.id.txtIdentificador);
         TextView txtDataContagem = child.findViewById(R.id.txtDataContagem);
         TextView txtMoscasIdentificadas = child.findViewById(R.id.txtMoscasIdentificadas);
-        TextView txtIdentificador = child.findViewById(R.id.txtIdentificador);
 
-        txtArquivo.setText(file.getName());
-        txtIdentificador.setText(result.identification);
-        txtDataContagem.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Utils.toDate(result.countDate)));
+        txtIdentificador.setText(file.getName());
+        txtDataContagem.setText(new SimpleDateFormat("DD/MM/yyyy HH24:mm:ss").format(Utils.toDate(result.countDate)));
         txtMoscasIdentificadas.setText(String.valueOf(result.fliesCount));
 
         imageThumbnail.setOnClickListener(new View.OnClickListener() {
@@ -189,7 +196,6 @@ public class ResultsActivity extends AppCompatActivity  {
         });
 
         Picasso.with(this).load(file).fit().centerCrop().into(imageThumbnail);
-
         linearImagemProcessada.addView(child);
     }
 

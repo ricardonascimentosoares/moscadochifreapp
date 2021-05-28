@@ -17,10 +17,11 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.FullScreenImage"></activity>
-        <activity android:name=".activity.FullScreenImageProcessed"></activity>
+
+
+
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.ListCountActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -29,12 +30,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.CountActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait">
+
+        </activity>
 
         <activity
             android:name=".activity.ResultsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity android:name=".activity.FullScreenImage"></activity>
+        <activity android:name=".activity.FullScreenImageProcessed"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

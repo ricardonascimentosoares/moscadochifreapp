@@ -59,7 +59,7 @@ public class FullScreenImageProcessed extends AppCompatActivity {
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                result.removeCount();
+                                result.deleteImageProcessed();
                                 AppDatabaseSingleton.getInstance().resultDao().update(result);
                                 Toast.makeText(FullScreenImageProcessed.this, "Contagem Apagada Com Sucesso!", Toast.LENGTH_SHORT).show();
 

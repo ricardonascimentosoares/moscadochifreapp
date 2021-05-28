@@ -15,48 +15,44 @@ import androidx.fragment.app.DialogFragment;
 
 import com.facom.rvns.moscadochifreapp.R;
 
-public class InsertInfoDialog extends DialogFragment {
+public class InsertCountNameDialog extends DialogFragment {
 
     private final int requestCode;
-    private final Intent data;
 
-    public interface InsertInfoDialogListener {
-        void onDialogPositiveClick(String strCowIdentification, int requestCode, Intent data);
+    public interface InsertCountNameDialogListener {
+        void onDialogPositiveClick(String countName, int requestCode);
     }
 
     // Use this instance of the interface to deliver action events
-    InsertInfoDialogListener listener;
+    InsertCountNameDialogListener listener;
 
 
-    public InsertInfoDialog(int requestCode, Intent data){
+    public InsertCountNameDialog(int requestCode){
         this.requestCode = requestCode;
-        this.data = data;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout to use as dialog or embedded fragment
-        View view = inflater.inflate(R.layout.dialog_insert_info_cow, container, false);
-        setCancelable(false);
-        final EditText editIdentification = view.findViewById(R.id.editIdentification);
-        Button btnDialogOk = view.findViewById(R.id.btnDialogOk);
+        View view = inflater.inflate(R.layout.dialog_insert_count_name, container, false);
+        setCancelable(true);
+        final EditText editCountName = view.findViewById(R.id.editCountName);
+        Button btnOk = view.findViewById(R.id.btnOk);
 
-        btnDialogOk.setOnClickListener(new View.OnClickListener() {
+        btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onDialogPositiveClick(editIdentification.getText().toString(), requestCode, data);
+                listener.onDialogPositiveClick(editCountName.getText().toString(), requestCode);
                 dismiss();
             }
         });
-
 
         return view;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
 
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -70,7 +66,7 @@ public class InsertInfoDialog extends DialogFragment {
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
-            listener = (InsertInfoDialogListener) context;
+            listener = (InsertCountNameDialogListener) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(context.toString()

@@ -4,6 +4,11 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.facom.rvns.moscadochifreapp.utils.Utils;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+
 @Entity
 public class Count {
 
@@ -18,4 +23,30 @@ public class Count {
 
     @ColumnInfo(name = "average_flies_count")
     public int averageFliesCount;
+
+    @ColumnInfo(name = "count_path")
+    public String countPath;
+
+
+    @Override
+    public String toString() {
+        return "\n Contagem: " + (name.equals("") ? "Sem identificação" : name)  + '\n'+
+                " Data de Início: " + Utils.toDateFormat(countDate) + '\n'+
+                " Média de moscas encontradas = " + averageFliesCount ;
+    }
+
+
+    public void deleteCountFiles() {
+        deleteDir(new File(countPath));
+    }
+
+    private void deleteDir(File file) {
+        File[] contents = file.listFiles();
+        if (contents != null) {
+            for (File f : contents) {
+                deleteDir(f);
+            }
+        }
+        file.delete();
+    }
 }

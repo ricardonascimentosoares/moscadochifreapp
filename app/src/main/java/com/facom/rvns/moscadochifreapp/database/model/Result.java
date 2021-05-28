@@ -42,8 +42,22 @@ public class Result implements Serializable {
     public int countId;
 
 
-    public void removeCount(){
+    public void deleteImageProcessed(){
         if (new File(photoProcessedPath).delete()){
+            this.fliesCount = 0;
+            this.countDate = null;
+            this.photoProcessedPath = null;
+            this.indProcessado = 0;
+        }
+    }
+
+    public void deleteImages(){
+
+        if (new File(photoPath).delete()){
+             if (photoProcessedPath != null)
+                 new File(photoProcessedPath).delete();
+
+            this.photoPath = null;
             this.fliesCount = 0;
             this.countDate = null;
             this.photoProcessedPath = null;

@@ -12,7 +12,7 @@ import androidx.room.TypeConverter;
 
 import com.facom.rvns.moscadochifreapp.activity.FullScreenImage;
 import com.facom.rvns.moscadochifreapp.activity.FullScreenImageProcessed;
-import com.facom.rvns.moscadochifreapp.activity.MainActivity;
+import com.facom.rvns.moscadochifreapp.activity.CountActivity;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
 
 import java.io.File;
@@ -20,27 +20,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utils {
     public static String TAG = "Utils";
 
-    private static File storageDir;
-    private static File storageDirSource;
-    private static File storageDirTarget;
 
-    public static void init(Context context){
-        storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        storageDirSource = new File(storageDir, "Imagens_Capturadas");
-        storageDirTarget = new File(storageDir, "Imagens_Processadas");
-
-        //cria os diretorios onde as imagens ficarao salvas
-        if (storageDirSource.mkdirs())
-            Log.d(TAG, "Diretorio 'Imagens_Capturadas' criado");
-
-        if (storageDirTarget.mkdirs())
-            Log.d(TAG, "Diretorio 'Imagens_Processadas' criado");
-    }
 
     public static void copyStream(Context context, Uri uri, File file){
         try {
@@ -103,7 +89,7 @@ public class Utils {
      */
     public static void startFullscreen(Activity context, Result result){
         Intent intent;
-        if (context instanceof MainActivity) {
+        if (context instanceof CountActivity) {
             intent = new Intent(context, FullScreenImage.class);
         }
         else{
@@ -116,13 +102,6 @@ public class Utils {
         context.startActivityForResult(intent, FullScreenImage.DELETE);
     }
 
-    public static File getStorageDirSource(){
-        return storageDirSource;
-    }
-
-    public static File getStorageDirTarget(){
-        return storageDirTarget;
-    }
 
     @TypeConverter
     public static Date toDate(Long dateLong){
@@ -132,5 +111,13 @@ public class Utils {
     @TypeConverter
     public static Long fromDate(Date date){
         return date == null ? null : date.getTime();
+    }
+
+    public static String toDateFormat(Date date){
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(date);
+    }
+
+    public static String toDateFormat(long millis){
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date(millis));
     }
 }
