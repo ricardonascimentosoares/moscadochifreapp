@@ -1,16 +1,21 @@
 package com.facom.rvns.moscadochifreapp.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
@@ -30,6 +35,8 @@ public class ListCountActivity extends AppCompatActivity implements InsertCountN
 
     public static final int REQUEST_CODE = 100;
     private static final int RESULT_NOVA_CONTAGEM = 123;
+    private static final Integer READ_EXST = 333;
+    private static final Integer WRITE_EXST = 444;
     private ListView listContagens;
     private ArrayAdapter<Count> adapter;
 
@@ -38,6 +45,9 @@ public class ListCountActivity extends AppCompatActivity implements InsertCountN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count_list);
+
+        askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_EXST);
+        askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXST);
 
         // "context" must be an Activity, Service or Application object from your app.
         if (! Python.isStarted()) {
@@ -109,7 +119,6 @@ public class ListCountActivity extends AppCompatActivity implements InsertCountN
     @Override
     public void onDialogPositiveClick(String countName, int requestCode) {
 
-
         MoscaDoChifreAppSingleton.getInstance().createNewDir(ListCountActivity.this, countName);
         adapter.clear();
         adapter.addAll(MoscaDoChifreAppSingleton.getInstance().getAllCounts());
@@ -119,4 +128,27 @@ public class ListCountActivity extends AppCompatActivity implements InsertCountN
 
     }
 
+
+    private void askForPermission(String permission, Integer requestCode) {
+        if (ContextCompat.checkSelfPermission(ListCountActivity.this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    ListCountActivity.this, permission)) {
+
+                //This is called if user has denied the permission before
+                //In this case I am just asking the permission again
+                ActivityCompat.requestPermissions(ListCountActivity.this,
+                        new String[]{permission}, requestCode);
+
+            } else {
+                ActivityCompat.requestPermissions(ListCountActivity.this,
+                        new String[]{permission}, requestCode);
+            }
+        } else {
+            Toast.makeText(this, permission + " já concedida!",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.facom.rvns.moscadochifreapp.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,9 +18,11 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
+import com.facom.rvns.moscadochifreapp.ExcelExporter;
 import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.callback.PythonCallback;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
@@ -50,6 +53,7 @@ public class ResultsActivity extends AppCompatActivity  {
     private TextView txtContagem;
     private TextView txtMediaGeral;
     private TextView txtDataContagem;
+    private View btnExportarDados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,29 @@ public class ResultsActivity extends AppCompatActivity  {
         txtContagem = findViewById(R.id.txtContagem);
         txtMediaGeral = findViewById(R.id.txtMediaGeral);
         txtDataContagem = findViewById(R.id.txtDataContagem);
+        btnExportarDados = findViewById(R.id.btnExportarDados);
+
+        btnExportarDados.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                List<Result> resultsProcessed = MoscaDoChifreAppSingleton.getInstance().getCountResultsProcessed();
+
+                if (resultsProcessed.size() == 0){
+                    Toast.makeText(ResultsActivity.this, "Não há resultados para exportar!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                File file = ExcelExporter.export(MoscaDoChifreAppSingleton.getInstance().getCountSelected(), MoscaDoChifreAppSingleton.getInstance().getCountResultsProcessed());
+
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                Uri screenshotUri = FileProvider.getUriForFile(ResultsActivity.this,"com.facom.rvns.moscadochifreapp.fileprovider", file);
+                sharingIntent.setType("*/*");
+                sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                startActivity(Intent.createChooser(sharingIntent, "Compartilhar arquivo"));
+            }
+        });
 
         int type = getIntent().getIntExtra("Tipo", 0);
 

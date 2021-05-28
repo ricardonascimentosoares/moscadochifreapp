@@ -30,6 +30,7 @@ public class MoscaDoChifreAppSingleton {
         return instance;
     }
 
+
     public boolean createNewDir(Context context, String name){
         boolean isCreated = false;
 
