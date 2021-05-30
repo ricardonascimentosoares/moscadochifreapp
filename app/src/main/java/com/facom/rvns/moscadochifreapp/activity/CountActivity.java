@@ -147,7 +147,7 @@ public class CountActivity extends AppCompatActivity  implements InsertInfoDialo
             insertInfoDialog.show(getSupportFragmentManager(), "DIALOG");
         }
 
-        else if (resultCode == FullScreenImage.DELETE || requestCode == RESULT_CONTAGEM_REALIZADA || requestCode == RESULT_INICIAR_CONTAGEM){
+        else if (resultCode == FullScreenImage.DELETE || resultCode == RESULT_CONTAGEM_REALIZADA || resultCode == RESULT_INICIAR_CONTAGEM){
             linearImagemCarregada.removeAllViews();
             addImagesToLinearLayout();
         }

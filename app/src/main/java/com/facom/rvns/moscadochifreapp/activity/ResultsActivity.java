@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,6 +55,7 @@ public class ResultsActivity extends AppCompatActivity  {
     private TextView txtMediaGeral;
     private TextView txtDataContagem;
     private View btnExportarDados;
+    private View btnExportarImagens;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class ResultsActivity extends AppCompatActivity  {
         txtMediaGeral = findViewById(R.id.txtMediaGeral);
         txtDataContagem = findViewById(R.id.txtDataContagem);
         btnExportarDados = findViewById(R.id.btnExportarDados);
+        btnExportarImagens = findViewById(R.id.btnExportarImagens);
 
         btnExportarDados.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +92,34 @@ public class ResultsActivity extends AppCompatActivity  {
                 startActivity(Intent.createChooser(sharingIntent, "Compartilhar arquivo"));
             }
         });
+
+
+        btnExportarImagens.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                List<Result> resultsProcessed = MoscaDoChifreAppSingleton.getInstance().getCountResultsProcessed();
+
+                if (resultsProcessed.size() == 0){
+                    Toast.makeText(ResultsActivity.this, "Não há resultados para exportar!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                List<Result> results =  MoscaDoChifreAppSingleton.getInstance().getCountResultsProcessed();
+                ArrayList<Uri> imageUris = new ArrayList<>();
+                for (Result result : results) {
+                    Uri screenshotUri = FileProvider.getUriForFile(ResultsActivity.this,"com.facom.rvns.moscadochifreapp.fileprovider", new File(result.photoProcessedPath));
+                    imageUris.add(screenshotUri);
+                }
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+                shareIntent.setType("image/*");
+                startActivity(Intent.createChooser(shareIntent, "Compartilhar arquivo"));
+            }
+        });
+
+
 
         int type = getIntent().getIntExtra("Tipo", 0);
 

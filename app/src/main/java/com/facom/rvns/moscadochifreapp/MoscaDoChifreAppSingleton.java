@@ -92,7 +92,7 @@ public class MoscaDoChifreAppSingleton {
 
     public void insertResult(Result result){
         result.countId = countSelected.id;
-        AppDatabaseSingleton.getInstance().resultDao().insertAll(result);
+        result.id = (int) AppDatabaseSingleton.getInstance().resultDao().insert(result);
     }
 
     public Result processResult(Result result) {
@@ -150,7 +150,9 @@ public class MoscaDoChifreAppSingleton {
         result.deleteImages();
         AppDatabaseSingleton.getInstance().resultDao().delete(result);
 
-        calculateAVG();
+        //se a foto nao tiver sido processada
+        if (result.photoProcessedPath != null)
+            calculateAVG();
     }
 
     public void deleteResultProcessed(Result result){

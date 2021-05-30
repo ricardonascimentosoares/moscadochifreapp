@@ -147,8 +147,8 @@ public class ListCountActivity extends AppCompatActivity implements InsertCountN
                         new String[]{permission}, requestCode);
             }
         } else {
-            Toast.makeText(this, permission + " já concedida!",
-                    Toast.LENGTH_SHORT).show();
+            /*Toast.makeText(this, permission + " já concedida!",
+                    Toast.LENGTH_SHORT).show();*/
         }
     }
 }

@@ -34,6 +34,9 @@ public interface ResultDao {
     @Insert
     void insertAll(Result... results);
 
+    @Insert
+    long insert(Result result);
+
     @Delete
     void delete(Result result);
 

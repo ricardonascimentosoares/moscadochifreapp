@@ -3,6 +3,8 @@ package com.facom.rvns.moscadochifreapp.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,13 +17,16 @@ import com.facom.rvns.moscadochifreapp.activity.FullScreenImageProcessed;
 import com.facom.rvns.moscadochifreapp.activity.CountActivity;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class Utils {
     public static String TAG = "Utils";
@@ -120,4 +125,40 @@ public class Utils {
     public static String toDateFormat(long millis){
         return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date(millis));
     }
+
+
+
+    public static ByteArrayOutputStream convertJPEGToPNGByteArray(String sourceFilePath, String targetFilePath){
+        try {
+            FileOutputStream out = new FileOutputStream(targetFilePath);
+            Bitmap bmp = BitmapFactory.decodeFile(sourceFilePath);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); //100-best quality
+            out.close();
+
+
+            File file = new File(targetFilePath);
+
+            FileInputStream fis = new FileInputStream(file);
+            //System.out.println(file.exists() + "!!");
+            //InputStream in = resource.openStream();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+            try {
+                for (int readNum; (readNum = fis.read(buf)) != -1;) {
+                    bos.write(buf, 0, readNum); //no doubt here is 0
+                    //Writes len bytes from the specified byte array starting at offset off to this byte array output stream.
+//                    System.out.println("read " + readNum + " bytes,");
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            return bos;
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
