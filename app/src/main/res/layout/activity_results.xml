@@ -36,14 +36,15 @@
             android:gravity="left"
             android:id="@+id/linearResultados"
             >
+
             <TextView
                 android:id="@+id/lbContagem"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:layout_weight="1.5"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Contagem: " />
+                android:layout_gravity="center"
+                android:layout_weight="1.5"
+                android:text="Coleta: "
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/txtContagem"
@@ -62,14 +63,15 @@
             android:gravity="left"
             android:id="@+id/linearDataContagem"
             >
+
             <TextView
                 android:id="@+id/lbDataContagem"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:layout_weight="1.5"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Data Início da Contagem: " />
+                android:layout_gravity="center"
+                android:layout_weight="1.5"
+                android:text="Data Início da Coleta: "
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/txtDataContagem"

@@ -28,9 +28,9 @@
             android:id="@+id/textview1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
             android:gravity="center"
-            android:text="Lista de Contagens Realizadas"
+            android:text="Lista de Coletas Realizadas"
+            android:textSize="18sp"
             android:textStyle="bold" />
         <View
             android:layout_width="match_parent"
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:drawableTop="@drawable/baseline_calculate_black_24dp"
-        android:text="Nova Contagem" />
+        android:text="Nova Coleta" />
 
 
 </LinearLayout>

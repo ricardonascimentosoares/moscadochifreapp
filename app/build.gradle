@@ -20,7 +20,7 @@ android {
 
         python {
             /*buildPython "C:\\Users\\PC\\AppData\\Local\\Programs\\Python\\Python37\\python.exe"*/
-            buildPython "/usr/bin/python3.5"
+            buildPython "/usr/bin/python3.8"
 
             pip {
                 // A pip requirement specifier, with or without a version number:
