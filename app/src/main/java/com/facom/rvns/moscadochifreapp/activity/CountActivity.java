@@ -109,9 +109,6 @@ public class CountActivity extends AppCompatActivity  implements InsertInfoDialo
 
             }
         });
-
-
-        //carrega as imagens e adiciona a listagem
         addImagesToLinearLayout();
 
     }
@@ -135,6 +132,7 @@ public class CountActivity extends AppCompatActivity  implements InsertInfoDialo
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
+
     }
 
     @Override
@@ -147,10 +145,14 @@ public class CountActivity extends AppCompatActivity  implements InsertInfoDialo
             insertInfoDialog.show(getSupportFragmentManager(), "DIALOG");
         }
 
-        else if (resultCode == FullScreenImage.DELETE || resultCode == RESULT_CONTAGEM_REALIZADA || resultCode == RESULT_INICIAR_CONTAGEM){
+        else if (resultCode == FullScreenImage.DELETE ||
+                resultCode == RESULT_CONTAGEM_REALIZADA ||
+                resultCode == RESULT_INICIAR_CONTAGEM ||
+                resultCode == ResultsActivity.VOLTAR){
             linearImagemCarregada.removeAllViews();
             addImagesToLinearLayout();
         }
+
 
         //caso a captura da imagem pela camera seja cancelada
         //else{
@@ -240,4 +242,5 @@ public class CountActivity extends AppCompatActivity  implements InsertInfoDialo
         MoscaDoChifreAppSingleton.getInstance().insertResult(result);
         setImageViewBitmap(result);
     }
+
 }

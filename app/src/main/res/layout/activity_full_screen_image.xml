@@ -40,11 +40,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="15dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
-        android:textColor="#126"
-        android:textOff="Alternar Contagem"
-        android:textOn="Alternar Contagem" />
+        android:textColor="#333"
+        android:textOff="Comparar"
+        android:textOn="Comparar " />
 
 </RelativeLayout>

@@ -2,6 +2,9 @@ package com.facom.rvns.moscadochifreapp.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +24,7 @@ import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
 
 import java.io.IOException;
 
@@ -29,11 +33,10 @@ public class FullScreenImageProcessed extends AppCompatActivity {
     public static final int DELETE =  7;
     private Result result;
     private PhotoView imgDisplay;
-    private float pivotX;
-    private float pivotY;
-    private float scale;
-    private float x;
-    private float y;
+    private PhotoViewAttacher mAttacher;
+    private RectF rectF;
+    private Bitmap imageBitmap;
+    private Bitmap imageProcessedBitmap;
 
 
     @Override
@@ -48,6 +51,14 @@ public class FullScreenImageProcessed extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         result = (Result)extras.getSerializable("result");
+
+        try {
+            imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse("file:///" + result.photoPath));
+            imageProcessedBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse("file:///" + result.photoProcessedPath));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         imgDisplay = findViewById(R.id.imgDisplay);
 
@@ -90,38 +101,48 @@ public class FullScreenImageProcessed extends AppCompatActivity {
         btnComparar.setVisibility(View.VISIBLE);
         btnComparar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                setImage(isChecked ? result.photoPath : result.photoProcessedPath);
+                setImage(isChecked ? imageBitmap : imageProcessedBitmap);
             }
         });
 
-        setImage(result.photoProcessedPath);
+
+        imgDisplay.setImageBitmap(imageProcessedBitmap);
+
+        // Attach a PhotoViewAttacher, which takes care of all of the zooming functionality.
+        mAttacher = new PhotoViewAttacher(imgDisplay);
     }
 
 
-    private void setImage(String imagePath){
-        pivotX = imgDisplay.getPivotX();
-        pivotY = imgDisplay.getPivotY();
-        scale = imgDisplay.getScale();
-        try {
-            imgDisplay.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse("file:///" + imagePath)));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void setImage(Bitmap bitmap){
 
-        if (scale < imgDisplay.getMinimumScale())
-            scale = imgDisplay.getMinimumScale();
-        else if (scale > imgDisplay.getMaximumScale())
-            scale = imgDisplay.getMaximumScale();
+        // salva os valores de zoom e translacao da imagem anterior
+        final float scaleValue = mAttacher.getScale();
+        rectF = mAttacher.getDisplayRect();
+        final float xPrev = (float) (imgDisplay.getWidth()/2.0 - rectF.left); // this referes to onSingleTapConfirmed in DefaultOnDoubleTapListener.java
+        final float yPrev = (float) (imgDisplay.getHeight()/2.0 - rectF.top);
 
+        imgDisplay.setImageBitmap(bitmap);
+
+        //aplica os valores de zoom e translacao na nova imagem para permitir melhor comparacao
+        //deve estar dentro Handler para que seja aplicado corretamente
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                imgDisplay.setScale(scale, pivotX, pivotY, false);
+
+                //caso o zoom entre as imagens seja incompativel, seta os valores maximo e minimo
+                if (scaleValue < imgDisplay.getMinimumScale())
+                    mAttacher.setScale(imgDisplay.getMinimumScale(),false);
+                else if (scaleValue > imgDisplay.getMaximumScale())
+                    mAttacher.setScale(imgDisplay.getMaximumScale(),false);
+                else
+                    mAttacher.setScale(scaleValue,false);
+
+                rectF = mAttacher.getDisplayRect();
+                float xAfter = (float) (imgDisplay.getWidth()/2.0 - rectF.left);
+                float yAfter = (float) (imgDisplay.getHeight()/2.0 - rectF.top);
+                mAttacher.onDrag(xAfter - xPrev,yAfter - yPrev);
             }
         });
-
-
 
     }
 

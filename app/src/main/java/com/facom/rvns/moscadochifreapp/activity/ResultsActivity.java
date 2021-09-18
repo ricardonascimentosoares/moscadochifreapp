@@ -42,6 +42,8 @@ public class ResultsActivity extends AppCompatActivity  {
 
     public static final int INICIAR_CONTAGEM = 1;
     public static final int CONTAGENS_REALIZADAS = 2;
+    public static final int VOLTAR = 999;
+
 
     private AlertDialog dialog;
     private TextView txtStatusProcessamento;
@@ -279,6 +281,9 @@ public class ResultsActivity extends AppCompatActivity  {
                     .show();
         }
         else{
+            Intent returnIntent = new Intent();
+            setResult(ResultsActivity.VOLTAR,returnIntent);
+
             super.onBackPressed();
         }
     }
@@ -292,4 +297,5 @@ public class ResultsActivity extends AppCompatActivity  {
             addImagesToLinearLayout();
         }
     }
+
 }
