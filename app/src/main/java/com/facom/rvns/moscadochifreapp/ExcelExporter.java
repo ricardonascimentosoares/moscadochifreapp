@@ -48,6 +48,8 @@ public class ExcelExporter {
             sheetA.addCell(new Label(2, 0, "Arquivo Foto Original"));
             sheetA.addCell(new Label(3, 0, "Arquivo Foto Processada"));
             sheetA.addCell(new Label(4, 0, "Moscas-dos-chifres Encontradas"));
+            sheetA.addCell(new Label(5, 0, "Moscas-dos-chifres Informadas pelo Usuário"));
+
 
             for (int i = 1; i <= results.size(); i++){
                 sheetA.addCell(new Label(0, i, String.valueOf(results.get(i-1).identification)));
@@ -55,6 +57,8 @@ public class ExcelExporter {
                 sheetA.addCell(new Label(2, i, new File(results.get(i - 1).photoPath).getName()));
                 sheetA.addCell(new Label(3, i, new File(results.get(i - 1).photoProcessedPath).getName()));
                 sheetA.addCell(new Label(4, i, String.valueOf(results.get(i-1).fliesCount)));
+                sheetA.addCell(new Label(5, i, String.valueOf(results.get(i-1).fliesCountSuggested)));
+
 
                 //addImageXSL(sheetA, results.get(i - 1).photoPath, 5,i);
                 //addImageXSL(sheetA, results.get(i - 1).photoProcessedPath, 6,i);

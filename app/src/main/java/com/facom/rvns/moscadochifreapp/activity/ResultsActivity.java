@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,13 +28,13 @@ import com.facom.rvns.moscadochifreapp.ExcelExporter;
 import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.callback.PythonCallback;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
+import com.facom.rvns.moscadochifreapp.database.dao.ResultDao;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -182,7 +184,7 @@ public class ResultsActivity extends AppCompatActivity  {
                             txtMediaGeral.setText(String.valueOf(media));
                         }
 
-                        setImageViewBitmap(resultProcessed);
+                        setResultInfoView(resultProcessed);
                         Toast.makeText(ResultsActivity.this, "Contagem Realizada!", Toast.LENGTH_SHORT).show();
 
                         //apaga o arquivo de origem
@@ -219,7 +221,7 @@ public class ResultsActivity extends AppCompatActivity  {
 
         for (Result result : results) {
             Log.d("Files", "FileName:" + result.id);
-            setImageViewBitmap(result);
+            setResultInfoView(result);
         }
     }
 
@@ -227,7 +229,7 @@ public class ResultsActivity extends AppCompatActivity  {
      *
      * @param result
      */
-    private void setImageViewBitmap(final Result result){
+    private void setResultInfoView(final Result result){
 
         File file = new File(result.photoProcessedPath);
 
@@ -235,23 +237,54 @@ public class ResultsActivity extends AppCompatActivity  {
 
         LinearLayout linearMoscasIdentificadas = child.findViewById(R.id.linearMoscasIdentificadas);
         LinearLayout linearDataContagem = child.findViewById(R.id.linearDataContagem);
+        LinearLayout linearSugerirContagem = child.findViewById(R.id.linearSugerirContagem);
 
         linearMoscasIdentificadas.setVisibility(View.VISIBLE);
         linearDataContagem.setVisibility(View.VISIBLE);
+        linearSugerirContagem.setVisibility(View.VISIBLE);
 
         ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
         TextView txtIdentificador = child.findViewById(R.id.txtIdentificador);
         TextView txtDataContagem = child.findViewById(R.id.txtDataContagem);
         TextView txtMoscasIdentificadas = child.findViewById(R.id.txtMoscasIdentificadas);
+        final EditText editMoscasSugeridas = child.findViewById(R.id.editMoscasSugeridas);
+        Button btnSalvarMoscasSugeridas = child.findViewById(R.id.btnSalvarMoscasSugeridas);
 
-        txtIdentificador.setText(file.getName());
+        txtIdentificador.setText(String.valueOf(result.identification));
         txtDataContagem.setText(Utils.toDateFormat(result.countDate));
         txtMoscasIdentificadas.setText(String.valueOf(result.fliesCount));
+        editMoscasSugeridas.setText(String.valueOf(result.fliesCountSuggested == 0 ? "": result.fliesCountSuggested));
 
         imageThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.startFullscreen(ResultsActivity.this, result);
+            }
+        });
+
+        btnSalvarMoscasSugeridas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strValorMoscasSugeridas = editMoscasSugeridas.getText().toString();
+
+                new AlertDialog.Builder(ResultsActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Salvar Sugestão?")
+                        .setMessage("Deseja salvar o valor informado de "+strValorMoscasSugeridas+" moscas-dos-chifres para esse bovino?")
+                        .setPositiveButton("Sim", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                result.fliesCountSuggested = Integer.parseInt(editMoscasSugeridas.getText().toString());
+                                int i = AppDatabaseSingleton.getInstance().resultDao().update(result);
+
+                                if (i > 0)
+                                    Toast.makeText(ResultsActivity.this, "Valor salvo com sucesso!", Toast.LENGTH_SHORT).show();
+                            }
+
+                        })
+                        .setNegativeButton("Não", null)
+                        .show();
             }
         });
 

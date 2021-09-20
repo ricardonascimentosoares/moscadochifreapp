@@ -41,6 +41,9 @@ public class Result implements Serializable {
     @ColumnInfo(name = "count_id")
     public int countId;
 
+    @ColumnInfo(name = "flies_count_suggested")
+    public int fliesCountSuggested;
+
 
     public void deleteImageProcessed(){
         if (new File(photoProcessedPath).delete()){
@@ -62,6 +65,7 @@ public class Result implements Serializable {
             this.countDate = null;
             this.photoProcessedPath = null;
             this.indProcessado = 0;
+            this.fliesCountSuggested = 0;
         }
     }
 }

@@ -10,7 +10,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:background="#FFF"
             android:layout_marginTop="1dp"
             android:layout_marginRight="1dp"
@@ -20,7 +20,7 @@
         <ImageView
             android:id="@+id/imageBoi"
             android:layout_width="128dp"
-            android:layout_height="72dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_launcher_foreground" />
@@ -28,9 +28,8 @@
         <LinearLayout
 
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_vertical"
             >
 
                 <LinearLayout
@@ -51,7 +50,6 @@
                             android:id="@+id/txtIdentificador"
                             android:layout_gravity="center"
                             android:textSize="12sp"
-                            android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0" />
@@ -134,6 +132,40 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="left"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:id="@+id/linearSugerirContagem"
+                    >
+                        <TextView
+                            android:id="@+id/lbMoscasSugeridas"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="Contagem Sugerida: " />
+
+                        <EditText
+                            android:id="@+id/editMoscasSugeridas"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:inputType="number"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content" />
+
+                        <Button
+                            android:id="@+id/btnSalvarMoscasSugeridas"
+                            android:layout_width="70dp"
+                            android:layout_height="35dip"
+                            android:textSize="12sp"
+                            android:text="Salvar"/>
 
                 </LinearLayout>
 
