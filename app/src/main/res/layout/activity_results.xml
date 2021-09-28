@@ -162,19 +162,12 @@
 
     <TextView
         android:id="@+id/textview2"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:gravity="center"
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Imagens Processadas \n(Toque na imagem para ampliar)"  />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="#CCC" />
-
-
 
 
     <LinearLayout

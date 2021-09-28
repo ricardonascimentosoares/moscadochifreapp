@@ -10,17 +10,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="96dp"
             android:background="#FFF"
-            android:layout_marginTop="1dp"
-            android:layout_marginRight="1dp"
-            android:layout_marginLeft="1dp">
+            android:layout_marginTop="1dp">
 
 
         <ImageView
             android:id="@+id/imageBoi"
             android:layout_width="128dp"
-            android:layout_height="80dp"
+            android:layout_height="96dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_launcher_foreground" />
@@ -111,8 +109,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:id="@+id/linearMoscasIdentificadas"
                     android:visibility="gone"
+                    android:id="@+id/linearMoscasIdentificadas"
                     >
                         <TextView
                             android:id="@+id/lbMoscasIdentificadas"
@@ -120,14 +118,14 @@
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:text="Moscas Identificadas: " />
+                            android:textSize="12sp"
+                            android:text="Moscas Identificadas (App): " />
 
                         <TextView
                             android:id="@+id/txtMoscasIdentificadas"
                             android:layout_gravity="center"
                             android:textStyle="bold"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textColor="#C20"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -137,7 +135,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="wrap_content"
                     android:gravity="left"
                     android:visibility="gone"
                     android:orientation="horizontal"
@@ -149,25 +147,30 @@
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:text="Contagem Sugerida: " />
+                            android:textSize="12sp"
+                            android:text="Moscas Identificadas (Usuário): " />
 
-                        <EditText
-                            android:id="@+id/editMoscasSugeridas"
-                            android:textSize="14sp"
+                        <TextView
+                            android:id="@+id/txtMoscasSugeridas"
+                            android:textSize="12sp"
                             android:textStyle="bold"
-                            android:inputType="number"
-                            android:layout_width="35dp"
+                            android:textColor="#222"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
-                        <Button
-                            android:id="@+id/btnSalvarMoscasSugeridas"
-                            android:layout_width="70dp"
-                            android:layout_height="35dip"
-                            android:textSize="12sp"
-                            android:text="Salvar"/>
 
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSugerirContagem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:visibility="gone"
+                    android:textSize="11sp"
+                    android:text="Informar contagem">
+
+                </Button>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -184,7 +187,7 @@
                             android:layout_height="wrap_content" />
 
                 </LinearLayout>
-        </LinearLayout>
+                </LinearLayout>
         </LinearLayout>
 
 

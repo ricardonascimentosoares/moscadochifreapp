@@ -15,33 +15,32 @@
         android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="15dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:textColor="#E11"
-        android:text="Apagar Foto" />
+        android:text="Apagar" />
 
     <Button
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
         android:layout_marginTop="15dp"
+        android:layout_marginRight="5dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:text="Fechar" />
 
     <ToggleButton
         android:id="@+id/btnComparar"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
-        android:layout_marginLeft="15dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:textColor="#333"

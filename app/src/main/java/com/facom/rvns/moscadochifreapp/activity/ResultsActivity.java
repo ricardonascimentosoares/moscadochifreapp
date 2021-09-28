@@ -28,9 +28,10 @@ import com.facom.rvns.moscadochifreapp.ExcelExporter;
 import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.callback.PythonCallback;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
-import com.facom.rvns.moscadochifreapp.database.dao.ResultDao;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.facom.rvns.moscadochifreapp.R;
+import com.facom.rvns.moscadochifreapp.dialog.InsertInfoDialog;
+import com.facom.rvns.moscadochifreapp.dialog.InsertSuggestionDialog;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -40,7 +41,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ResultsActivity extends AppCompatActivity  {
+public class ResultsActivity extends AppCompatActivity implements InsertSuggestionDialog.InsertSuggestionDialogListener {
 
     public static final int INICIAR_CONTAGEM = 1;
     public static final int CONTAGENS_REALIZADAS = 2;
@@ -114,6 +115,8 @@ public class ResultsActivity extends AppCompatActivity  {
                 for (Result result : results) {
                     Uri screenshotUri = FileProvider.getUriForFile(ResultsActivity.this,"com.facom.rvns.moscadochifreapp.fileprovider", new File(result.photoProcessedPath));
                     imageUris.add(screenshotUri);
+                    screenshotUri = FileProvider.getUriForFile(ResultsActivity.this,"com.facom.rvns.moscadochifreapp.fileprovider", new File(result.photoPath));
+                    imageUris.add(screenshotUri);
                 }
 
                 Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
@@ -133,7 +136,7 @@ public class ResultsActivity extends AppCompatActivity  {
 
             linearProgress.setVisibility(View.VISIBLE);
 
-            executor = Executors.newFixedThreadPool(2);
+            executor = Executors.newFixedThreadPool(3);
 
             List<Result> resultsNotProcessed = MoscaDoChifreAppSingleton.getInstance().getCountResultsNotProcessed();
 
@@ -237,23 +240,28 @@ public class ResultsActivity extends AppCompatActivity  {
 
         LinearLayout linearMoscasIdentificadas = child.findViewById(R.id.linearMoscasIdentificadas);
         LinearLayout linearDataContagem = child.findViewById(R.id.linearDataContagem);
-        LinearLayout linearSugerirContagem = child.findViewById(R.id.linearSugerirContagem);
-
-        linearMoscasIdentificadas.setVisibility(View.VISIBLE);
-        linearDataContagem.setVisibility(View.VISIBLE);
-        linearSugerirContagem.setVisibility(View.VISIBLE);
-
+        final LinearLayout linearSugerirContagem = child.findViewById(R.id.linearSugerirContagem);
         ImageView imageThumbnail = child.findViewById(R.id.imageBoi);
         TextView txtIdentificador = child.findViewById(R.id.txtIdentificador);
         TextView txtDataContagem = child.findViewById(R.id.txtDataContagem);
         TextView txtMoscasIdentificadas = child.findViewById(R.id.txtMoscasIdentificadas);
-        final EditText editMoscasSugeridas = child.findViewById(R.id.editMoscasSugeridas);
-        Button btnSalvarMoscasSugeridas = child.findViewById(R.id.btnSalvarMoscasSugeridas);
+        final TextView txtMoscasSugeridas = child.findViewById(R.id.txtMoscasSugeridas);
+        Button btnSugerirContagem = child.findViewById(R.id.btnSugerirContagem);
+
+        linearMoscasIdentificadas.setVisibility(View.VISIBLE);
+        linearDataContagem.setVisibility(View.VISIBLE);
+        btnSugerirContagem.setVisibility(View.VISIBLE);
 
         txtIdentificador.setText(String.valueOf(result.identification));
         txtDataContagem.setText(Utils.toDateFormat(result.countDate));
         txtMoscasIdentificadas.setText(String.valueOf(result.fliesCount));
-        editMoscasSugeridas.setText(String.valueOf(result.fliesCountSuggested == 0 ? "": result.fliesCountSuggested));
+
+
+        if (result.fliesCountSuggested != 0){
+            linearSugerirContagem.setVisibility(View.VISIBLE);
+            txtMoscasSugeridas.setText(String.valueOf(result.fliesCountSuggested));
+            btnSugerirContagem.setText("Editar Contagem");
+        }
 
         imageThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,29 +270,12 @@ public class ResultsActivity extends AppCompatActivity  {
             }
         });
 
-        btnSalvarMoscasSugeridas.setOnClickListener(new View.OnClickListener() {
+        btnSugerirContagem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String strValorMoscasSugeridas = editMoscasSugeridas.getText().toString();
 
-                new AlertDialog.Builder(ResultsActivity.this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Salvar Sugestão?")
-                        .setMessage("Deseja salvar o valor informado de "+strValorMoscasSugeridas+" moscas-dos-chifres para esse bovino?")
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                result.fliesCountSuggested = Integer.parseInt(editMoscasSugeridas.getText().toString());
-                                int i = AppDatabaseSingleton.getInstance().resultDao().update(result);
-
-                                if (i > 0)
-                                    Toast.makeText(ResultsActivity.this, "Valor salvo com sucesso!", Toast.LENGTH_SHORT).show();
-                            }
-
-                        })
-                        .setNegativeButton("Não", null)
-                        .show();
+                InsertSuggestionDialog insertSuggestionDialog = new InsertSuggestionDialog(result);
+                insertSuggestionDialog.show(getSupportFragmentManager(), "DIALOG");
             }
         });
 
@@ -331,4 +322,22 @@ public class ResultsActivity extends AppCompatActivity  {
         }
     }
 
+    @Override
+    public void onDialogPositiveClick() {
+
+        final List<Result> results = MoscaDoChifreAppSingleton.getInstance().getCountResultsProcessed();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                linearImagemProcessada.removeAllViews();
+                for (Result result : results) {
+                    Log.d("Files", "FileName:" + result.id);
+                    setResultInfoView(result);
+                }
+            }
+        });
+
+
+    }
 }

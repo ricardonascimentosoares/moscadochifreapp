@@ -31,6 +31,7 @@
         android:drawableTop="@drawable/baseline_camera_enhance_black_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="12sp"
         android:gravity="center"
         android:text="Capturar" />
 
@@ -39,6 +40,7 @@
         android:drawableTop="@drawable/baseline_archive_black_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="12sp"
         android:gravity="center"
         android:text="Carregar Imagem" />
 
@@ -47,8 +49,15 @@
             android:drawableTop="@drawable/baseline_history_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="12sp"
             android:gravity="center"
             android:text="Resultados" />
+
+        <Button
+            android:id="@+id/btnConfiguracao"
+            android:drawableLeft="@drawable/cog_outline_black"
+            android:layout_width="46dp"
+            android:layout_height="match_parent"/>
 
 
     </LinearLayout>
@@ -56,7 +65,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="0dp"
+        android:layout_weight="8"
         android:orientation="vertical"
     >
         <TextView
@@ -97,8 +107,10 @@
         android:id="@+id/btnIniciarContagem"
         android:drawableTop="@drawable/baseline_calculate_black_24dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_gravity="center"
+        android:textSize="12sp"
         android:text="Iniciar Contagem" />
 
 
