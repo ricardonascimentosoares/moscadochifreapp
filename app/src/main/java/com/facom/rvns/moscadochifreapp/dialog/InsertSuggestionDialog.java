@@ -54,6 +54,12 @@ public class InsertSuggestionDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
 
+                //caso o Edittext esteja vazio
+                if (editValorSugestao.getText().toString().length() == 0) {
+                    dismiss();
+                    return;
+                }
+
                 result.fliesCountSuggested = Integer.parseInt(editValorSugestao.getText().toString());
                 int i = AppDatabaseSingleton.getInstance().resultDao().update(result);
 

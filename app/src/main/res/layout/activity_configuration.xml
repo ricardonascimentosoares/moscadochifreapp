@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dip"
+    android:gravity="center"
+    tools:context=".activity.CountActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="30dp"
+        android:gravity="center"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:padding="10dip"
+        android:orientation="vertical"
+    >
+
+        <TextView
+            android:id="@+id/textview1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Parâmetros Algoritmo Contagem"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#EEE"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:background=""
+            >
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:justificationMode="inter_word"
+                android:text="Kernel para suavização da imagem do bovino:"
+                />
+
+            <EditText
+                android:id="@+id/editSuav1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                >
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/editSuav2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25"
+                >
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/editSuav3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25"
+                >
+
+            </EditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:justificationMode="inter_word"
+                android:text="Kernel e repetição para aplicação de erosão do contorno do bovino:"/>
+
+            <EditText
+                android:id="@+id/editSuav1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                >
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/editSuav2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                >
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/editSuav3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                >
+
+            </EditText>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:justificationMode="inter_word"
+                android:text="Kernel e repetição para aplicação de dilatação do contorno do bovino"/>
+
+            <EditText
+                android:id="@+id/editSuav1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="21"
+                >
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/editSuav2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="21"
+                >
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/editSuav3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                >
+
+            </EditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:justificationMode="inter_word"
+                android:text="Limiares de pixels de cada borda:"/>
+
+            <EditText
+                android:id="@+id/editSuav1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15"
+                >
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/editSuav2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="70"
+                >
+
+            </EditText>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:justificationMode="inter_word"
+                android:text="Limiares do perimetro da borda identificada como mosca do chifre:"/>
+
+            <EditText
+                android:id="@+id/editSuav1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15"
+                >
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/editSuav2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45"
+                >
+
+            </EditText>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnNovaContagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/baseline_calculate_black_24dp"
+            android:text="Nova Coleta" />
+
+        <Button
+            android:id="@+id/btnConfiguracao"
+            android:drawableTop="@drawable/cog_outline_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Configurações"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

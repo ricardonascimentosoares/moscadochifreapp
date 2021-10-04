@@ -13,6 +13,8 @@
         android:id="@+id/txtNomeContagem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+
         android:text="Coleta Sem Identificação"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -53,11 +55,6 @@
             android:gravity="center"
             android:text="Resultados" />
 
-        <Button
-            android:id="@+id/btnConfiguracao"
-            android:drawableLeft="@drawable/cog_outline_black"
-            android:layout_width="46dp"
-            android:layout_height="match_parent"/>
 
 
     </LinearLayout>
@@ -103,15 +100,23 @@
 
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center">
+
     <Button
         android:id="@+id/btnIniciarContagem"
         android:drawableTop="@drawable/baseline_calculate_black_24dp"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="12sp"
         android:text="Iniciar Contagem" />
+
+    </LinearLayout>
 
 
 

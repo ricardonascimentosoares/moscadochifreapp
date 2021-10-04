@@ -14,13 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
+        android:paddingTop="30dp"
         android:gravity="center"
         />
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="0dp"
+        android:layout_weight="6"
         android:orientation="vertical"
     >
 
@@ -52,18 +54,31 @@
             android:text="Nenhuma Contagem Encontrada!" >
         </TextView>
 
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnNovaContagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/baseline_calculate_black_24dp"
+            android:text="Nova Coleta" />
+
+        <Button
+            android:id="@+id/btnConfiguracao"
+            android:drawableTop="@drawable/cog_outline_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Configurações"/>
 
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btnNovaContagem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:drawableTop="@drawable/baseline_calculate_black_24dp"
-        android:text="Nova Coleta" />
 
 
 </LinearLayout>
