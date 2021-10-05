@@ -113,6 +113,15 @@ public class ListCountActivity extends AppCompatActivity implements InsertCountN
             }
         });
 
+        Button btnConfiguracao = findViewById(R.id.btnConfiguracao);
+        btnConfiguracao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ListCountActivity.this, ConfigurationActivity.class);
+                startActivity(i);
+            }
+        });
+
     }
 
 

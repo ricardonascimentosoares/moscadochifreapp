@@ -45,6 +45,8 @@
 
         <activity android:name=".activity.FullScreenImage"></activity>
         <activity android:name=".activity.FullScreenImageProcessed"></activity>
+        <activity android:name=".activity.ConfigurationActivity"></activity>
+
 
         <provider
             android:name="androidx.core.content.FileProvider"

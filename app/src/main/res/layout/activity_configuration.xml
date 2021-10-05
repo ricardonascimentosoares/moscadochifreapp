@@ -40,201 +40,242 @@
             android:layout_height="1dip"
             android:background="#EEE"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:background=""
-            >
 
-            <TextView
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:justificationMode="inter_word"
-                android:text="Kernel para suavização da imagem do bovino:"
-                />
-
-            <EditText
-                android:id="@+id/editSuav1"
+            <TableLayout
+                android:paddingTop="10dp"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="5"
+                android:gravity="center"
+                android:orientation="horizontal"
                 >
 
-            </EditText>
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
 
-            <EditText
-                android:id="@+id/editSuav2"
-                android:layout_width="wrap_content"
+                    android:text="Kernel para suavização da imagem do bovino:"
+                    />
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editSuav1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5"
+                    >
+
+                </EditText>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editSuav2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="25"
+                    >
+
+                </EditText>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editSuav3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="25"
+                    >
+
+                </EditText>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="25"
+                android:gravity="center"
+                android:orientation="horizontal"
                 >
 
-            </EditText>
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
 
-            <EditText
-                android:id="@+id/editSuav3"
-                android:layout_width="wrap_content"
+                    android:text="Kernel e repetição para aplicação de erosão do contorno do bovino:"/>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editEro1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3"
+                    >
+
+                </EditText>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editEro2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3"
+                    >
+
+                </EditText>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editEro3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    >
+
+                </EditText>
+
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="25"
+                android:gravity="center"
+                android:orientation="horizontal"
                 >
 
-            </EditText>
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
 
-        </LinearLayout>
+                    android:text="Kernel e repetição para aplicação de dilatação do contorno do bovino:"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            >
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editDil1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="21"
+                    >
 
-            <TextView
-                android:layout_width="200dp"
+                </EditText>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editDil2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="21"
+                    >
+
+                </EditText>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editDil3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5"
+                    >
+
+                </EditText>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:justificationMode="inter_word"
-                android:text="Kernel e repetição para aplicação de erosão do contorno do bovino:"/>
-
-            <EditText
-                android:id="@+id/editSuav1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3"
+                android:gravity="center"
+                android:orientation="horizontal"
                 >
 
-            </EditText>
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
 
-            <EditText
-                android:id="@+id/editSuav2"
-                android:layout_width="wrap_content"
+                    android:text="Limiares de pixels de cada borda:"/>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editLimiarPix1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="15"
+                    >
+
+                </EditText>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editLimiarPix2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="70"
+                    >
+
+                </EditText>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="70"
+                    android:visibility="invisible"
+                    >
+
+                </TextView>
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="3"
+                android:gravity="center"
+                android:orientation="horizontal"
                 >
 
-            </EditText>
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    
+                    android:text="Limiares do perimetro da borda identificada como mosca do chifre:"/>
 
-            <EditText
-                android:id="@+id/editSuav3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                >
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editLimiarBorda1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="15"
+                    >
 
-            </EditText>
+                </EditText>
 
-        </LinearLayout>
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/editLimiarBorda2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="45"
+                    >
 
+                </EditText>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="70"
+                    android:visibility="invisible"
+                    >
 
-            <TextView
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:justificationMode="inter_word"
-                android:text="Kernel e repetição para aplicação de dilatação do contorno do bovino"/>
+                </TextView>
 
-            <EditText
-                android:id="@+id/editSuav1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="21"
-                >
+            </TableRow>
 
-            </EditText>
+        </TableLayout>
 
-            <EditText
-                android:id="@+id/editSuav2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="21"
-                >
-
-            </EditText>
-
-            <EditText
-                android:id="@+id/editSuav3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5"
-                >
-
-            </EditText>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:justificationMode="inter_word"
-                android:text="Limiares de pixels de cada borda:"/>
-
-            <EditText
-                android:id="@+id/editSuav1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="15"
-                >
-
-            </EditText>
-
-            <EditText
-                android:id="@+id/editSuav2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="70"
-                >
-
-            </EditText>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:justificationMode="inter_word"
-                android:text="Limiares do perimetro da borda identificada como mosca do chifre:"/>
-
-            <EditText
-                android:id="@+id/editSuav1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="15"
-                >
-
-            </EditText>
-
-            <EditText
-                android:id="@+id/editSuav2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="45"
-                >
-
-            </EditText>
-
-        </LinearLayout>
 
 
     </LinearLayout>
@@ -242,23 +283,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="6"
         android:gravity="center">
 
         <Button
-            android:id="@+id/btnNovaContagem"
+            android:id="@+id/btnSalvarConfig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawableTop="@drawable/baseline_calculate_black_24dp"
-            android:text="Nova Coleta" />
+            android:text="Salvar" />
 
         <Button
-            android:id="@+id/btnConfiguracao"
-            android:drawableTop="@drawable/cog_outline_black"
+            android:id="@+id/btnCancelarConfig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Configurações"/>
+            android:text="Cancelar"/>
+
+        <Button
+            android:id="@+id/btnRestaurarPadroes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restaurar Padrões"/>
 
 
     </LinearLayout>
