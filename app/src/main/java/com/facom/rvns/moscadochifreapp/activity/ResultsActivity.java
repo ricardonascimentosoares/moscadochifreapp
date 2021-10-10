@@ -28,6 +28,7 @@ import com.facom.rvns.moscadochifreapp.ExcelExporter;
 import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.callback.PythonCallback;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
+import com.facom.rvns.moscadochifreapp.database.model.Configuration;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.dialog.InsertInfoDialog;
@@ -167,7 +168,15 @@ public class ResultsActivity extends AppCompatActivity implements InsertSuggesti
                     pyobj = Python.getInstance().getModule("main");
 
                 PythonCallback pythonCallback = new PythonCallback();
-                PyObject pyResponse = pyobj.callAttr("realiza_contagem", result.photoPath, MoscaDoChifreAppSingleton.getInstance().getStorageDirTarget().getAbsolutePath(), pythonCallback);
+
+                Configuration configuration = MoscaDoChifreAppSingleton.getInstance().getConfiguration();
+                String path = MoscaDoChifreAppSingleton.getInstance().getStorageDirTarget().getAbsolutePath();
+
+                PyObject pyResponse = pyobj.callAttr("realiza_contagem", result.photoPath, path , pythonCallback, configuration.valorSuav1, configuration.valorSuav2, configuration.valorSuav3,
+                        configuration.valorErosao1, configuration.valorErosao2, configuration.valorErosao3,
+                        configuration.valorDilat1, configuration.valorDilat2, configuration.valorDilat3,
+                        configuration.valorLimiarPixel1, configuration.valorLimiarPixel2,
+                        configuration.valorLimiarBorda1, configuration.valorLimiarBorda2);
 
                 result.photoProcessedPath = pyResponse.toString();
                 result.fliesCount = pythonCallback.getFliesCount();

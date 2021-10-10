@@ -7,16 +7,8 @@ import androidx.room.Room;
 public class AppDatabaseSingleton {
 
     private static AppDatabase db;
-    private static Context c;
 
-    public static void init(Context context){
-        c = context;
-    }
-
-    public static AppDatabase getInstance(){
-
-        if (c == null)
-            return null;
+    public static AppDatabase getInstance(Context c){
 
         if (db == null)
             db = Room.databaseBuilder(c, AppDatabase.class, "database-name").allowMainThreadQueries().build();

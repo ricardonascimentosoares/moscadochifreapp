@@ -46,7 +46,23 @@ public class Configuration {
     @ColumnInfo(name = "valor_lim_borda_1")
     public int valorLimiarBorda1;
 
-    @ColumnInfo(name = "valor_lim_pix_2")
+    @ColumnInfo(name = "valor_lim_borda_2")
     public int valorLimiarBorda2;
+
+    public void setDefaultValues(){
+        valorSuav1 = 5;
+        valorSuav2 = 25;
+        valorSuav3 = 25;
+        valorErosao1 = 3;
+        valorErosao2 = 3;
+        valorErosao3 = 1;
+        valorDilat1 = 21;
+        valorDilat2 = 21;
+        valorDilat3 = 5;
+        valorLimiarPixel1 = 15;
+        valorLimiarPixel2 = 70;
+        valorLimiarBorda1 = 15;
+        valorLimiarBorda2 = 45;
+    }
 
 }

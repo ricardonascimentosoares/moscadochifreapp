@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
+import com.facom.rvns.moscadochifreapp.database.model.Configuration;
 import com.facom.rvns.moscadochifreapp.database.model.Count;
 import com.facom.rvns.moscadochifreapp.database.model.Result;
 import com.facom.rvns.moscadochifreapp.utils.Utils;
@@ -19,9 +20,31 @@ public class MoscaDoChifreAppSingleton {
 
     private static MoscaDoChifreAppSingleton instance;
     private Count countSelected;
+    private Configuration configurationSaved;
     private File storageCountDirSource;
     private File storageCountDirTarget;
     private File storageCountDir;
+    private static Context c;
+
+
+    public MoscaDoChifreAppSingleton(){
+        Configuration configuration = AppDatabaseSingleton.getInstance(c).configurationDao().getConfigurationById(1);
+        if (configuration == null) {
+            configuration = new Configuration();
+            configuration.setDefaultValues();
+            long id = AppDatabaseSingleton.getInstance(c).configurationDao().insert(configuration);
+            if (id == 1) {
+                configuration.id = (int) id;
+            }
+        }
+        configurationSaved = configuration;
+    }
+
+    public static void init(Context context){
+        c = context;
+        if (instance == null)
+            instance = new MoscaDoChifreAppSingleton();
+    }
 
 
     public static MoscaDoChifreAppSingleton getInstance(){
@@ -53,15 +76,19 @@ public class MoscaDoChifreAppSingleton {
         countSelected.countDate = Utils.fromDate(new Date());
         countSelected.name = name;
 
-        long id = AppDatabaseSingleton.getInstance().countDao().insert(countSelected);
+        long id = AppDatabaseSingleton.getInstance(c).countDao().insert(countSelected);
         countSelected.id = (int) id;
 
         return isCreated;
     }
+    
+    public Configuration getConfiguration(){
+        return configurationSaved;
+    }
 
     public void loadCount(int id){
 
-        countSelected = AppDatabaseSingleton.getInstance().countDao().getCountById(id);
+        countSelected = AppDatabaseSingleton.getInstance(c).countDao().getCountById(id);
 
         storageCountDir = new File(countSelected.countPath);
         storageCountDirSource = new File(storageCountDir, "Imagens_Capturadas");
@@ -70,39 +97,53 @@ public class MoscaDoChifreAppSingleton {
     }
 
     public List<Result>  getCountResultsNotProcessed(){
-        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAllResultsNotProcessedByCountId(countSelected.id);
+        List<Result> results = AppDatabaseSingleton.getInstance(c).resultDao().getAllResultsNotProcessedByCountId(countSelected.id);
         return results;
     }
 
     public List<Result>  getCountResultsProcessed(){
-        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAllResultsProcessedByCountId(countSelected.id);
+        List<Result> results = AppDatabaseSingleton.getInstance(c).resultDao().getAllResultsProcessedByCountId(countSelected.id);
         return results;
     }
 
 
     public List<Result>  getCountResults(){
-        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAllResultsByCountId(countSelected.id);
+        List<Result> results = AppDatabaseSingleton.getInstance(c).resultDao().getAllResultsByCountId(countSelected.id);
         return results;
     }
 
     public List<Count>  getAllCounts(){
-        List<Count> results = AppDatabaseSingleton.getInstance().countDao().getAll();
+        List<Count> results = AppDatabaseSingleton.getInstance(c).countDao().getAll();
         return results;
     }
 
     public void insertResult(Result result){
         result.countId = countSelected.id;
-        result.id = (int) AppDatabaseSingleton.getInstance().resultDao().insert(result);
+        result.id = (int) AppDatabaseSingleton.getInstance(c).resultDao().insert(result);
     }
 
     public Result processResult(Result result) {
         result.countDate = Utils.fromDate(new Date());
         result.indProcessado = 1;
-        AppDatabaseSingleton.getInstance().resultDao().update(result);
+        AppDatabaseSingleton.getInstance(c).resultDao().update(result);
         return result;
 
     }
 
+    public int updateResult(Result result) {
+        return AppDatabaseSingleton.getInstance(c).resultDao().update(result);
+    }
+
+    public void updateConfiguration(Configuration configuration) {
+        int i =  AppDatabaseSingleton.getInstance(c).configurationDao().update(configuration);
+        if (i > 0)
+            configurationSaved = configuration;
+    }
+
+    public void setConfigurationDefaultValues(){
+        configurationSaved.setDefaultValues();
+        AppDatabaseSingleton.getInstance(c).configurationDao().update(configurationSaved);
+    }
 
     public Count getCountSelected() {
         return countSelected;
@@ -123,7 +164,7 @@ public class MoscaDoChifreAppSingleton {
 
 
     public int calculateAVG(){
-        List<Result> results = AppDatabaseSingleton.getInstance().resultDao().getAllResultsProcessedByCountId(countSelected.id);
+        List<Result> results = AppDatabaseSingleton.getInstance(c).resultDao().getAllResultsProcessedByCountId(countSelected.id);
         int numberOfResults = results.size();
         int sumFliesCount = 0;
         int averageFliesCount = 0;
@@ -132,7 +173,7 @@ public class MoscaDoChifreAppSingleton {
         }
         averageFliesCount = sumFliesCount/numberOfResults;
         countSelected.averageFliesCount = averageFliesCount;
-        AppDatabaseSingleton.getInstance().countDao().update(countSelected);
+        AppDatabaseSingleton.getInstance(c).countDao().update(countSelected);
         return countSelected.averageFliesCount;
     }
 
@@ -140,15 +181,15 @@ public class MoscaDoChifreAppSingleton {
     public void deleteCount(Count count){
         count.deleteCountFiles();
 
-        AppDatabaseSingleton.getInstance().resultDao().deleteByCountId(count.id);
-        AppDatabaseSingleton.getInstance().countDao().delete(count);
+        AppDatabaseSingleton.getInstance(c).resultDao().deleteByCountId(count.id);
+        AppDatabaseSingleton.getInstance(c).countDao().delete(count);
 
     }
 
 
     public void deleteResult(Result result){
         result.deleteImages();
-        AppDatabaseSingleton.getInstance().resultDao().delete(result);
+        AppDatabaseSingleton.getInstance(c).resultDao().delete(result);
 
         //se a foto nao tiver sido processada
         if (result.photoProcessedPath != null)
@@ -157,7 +198,7 @@ public class MoscaDoChifreAppSingleton {
 
     public void deleteResultProcessed(Result result){
         result.deleteImageProcessed();
-        AppDatabaseSingleton.getInstance().resultDao().update(result);
+        AppDatabaseSingleton.getInstance(c).resultDao().update(result);
 
         calculateAVG();
     }

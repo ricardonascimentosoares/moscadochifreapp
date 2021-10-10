@@ -54,7 +54,7 @@ public class ListCountActivity extends AppCompatActivity implements InsertCountN
             Python.start(new AndroidPlatform(getApplicationContext()));
         }
 
-        AppDatabaseSingleton.init(getApplicationContext());
+        MoscaDoChifreAppSingleton.init(getApplicationContext());
 
         listContagens = (ListView) findViewById(R.id.listContagens);
 

@@ -63,32 +63,26 @@
                     />
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editSuav1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editSuav2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="25"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editSuav3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="25"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
@@ -108,32 +102,26 @@
                     android:text="Kernel e repetição para aplicação de erosão do contorno do bovino:"/>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editEro1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editEro2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editEro3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
@@ -154,32 +142,26 @@
                     android:text="Kernel e repetição para aplicação de dilatação do contorno do bovino:"/>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editDil1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="21"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editDil2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="21"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editDil3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
@@ -199,22 +181,18 @@
                     android:text="Limiares de pixels de cada borda:"/>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editLimiarPix1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="15"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editLimiarPix2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="70"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
@@ -244,22 +222,18 @@
                     android:text="Limiares do perimetro da borda identificada como mosca do chifre:"/>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editLimiarBorda1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="15"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/editLimiarBorda2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="45"
-                    >
+                    android:inputType="number">
 
                 </EditText>
 
@@ -296,7 +270,7 @@
             android:id="@+id/btnCancelarConfig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancelar"/>
+            android:text="Descartar" />
 
         <Button
             android:id="@+id/btnRestaurarPadroes"

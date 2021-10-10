@@ -29,7 +29,13 @@ from java import cast
 
 #img = 'image/img8.jpg'
 
-def realiza_contagem(img, targetDir, activity_ref):
+def realiza_contagem(img, targetDir, activity_ref, suav_bov1, suav_bov2, suav_bov3, w_erode1, w_erode2, w_erode3, w_dilate1, w_dilate2, w_dilate3, pix_cont1, pix_cont2, perim1, perim2):
+
+    suav_bov = [suav_bov1, suav_bov2, suav_bov3]
+    w_erode = [w_erode1, w_erode2, w_erode3]
+    w_dilate = [w_dilate1, w_dilate2, w_dilate3]
+    pix_cont = [pix_cont1, pix_cont2]
+    perim = [perim1, perim2]
 
     OutputWritable = jclass("com.facom.rvns.moscadochifreapp.interfaces.OutputWritable")
     outputWritable = cast(OutputWritable, activity_ref)
@@ -43,11 +49,11 @@ def realiza_contagem(img, targetDir, activity_ref):
 
 
     # Constantes
-    suav_bov = [5, 25, 25]  # Kernel para suavização da imagem do bovino
-    w_erode = [3,3,1]       # Kernel e repetição para aplicação de erosão do contorno do bovino
-    w_dilate = [21,21,5]    # Kernel e repetição para aplicação de dilatação do contorno do bovino
-    pix_cont = [15,70]      # Limiares de pixels de cada borda
-    perim = [15,45]          # Limiares do perimetro da borda identificada como mosca do chifre
+#    suav_bov = [5, 25, 25]  # Kernel para suavização da imagem do bovino
+#    w_erode = [3,3,1]       # Kernel e repetição para aplicação de erosão do contorno do bovino
+#    w_dilate = [21,21,5]    # Kernel e repetição para aplicação de dilatação do contorno do bovino
+#    pix_cont = [15,70]      # Limiares de pixels de cada borda
+#    perim = [15,45]          # Limiares do perimetro da borda identificada como mosca do chifre
 
     # onlyfiles = [f for f in listdir(inputPath) if isfile(join(inputPath, f))]
 

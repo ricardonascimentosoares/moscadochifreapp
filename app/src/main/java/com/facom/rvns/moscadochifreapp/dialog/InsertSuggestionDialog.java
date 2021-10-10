@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.facom.rvns.moscadochifreapp.MoscaDoChifreAppSingleton;
 import com.facom.rvns.moscadochifreapp.R;
 import com.facom.rvns.moscadochifreapp.activity.ResultsActivity;
 import com.facom.rvns.moscadochifreapp.database.AppDatabaseSingleton;
@@ -61,7 +62,7 @@ public class InsertSuggestionDialog extends DialogFragment {
                 }
 
                 result.fliesCountSuggested = Integer.parseInt(editValorSugestao.getText().toString());
-                int i = AppDatabaseSingleton.getInstance().resultDao().update(result);
+                int i = MoscaDoChifreAppSingleton.getInstance().updateResult(result);
 
                 if (i > 0)
                     Toast.makeText(getContext(), "Valor salvo com sucesso!", Toast.LENGTH_SHORT).show();
