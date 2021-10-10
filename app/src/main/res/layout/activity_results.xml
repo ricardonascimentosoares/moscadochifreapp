@@ -14,42 +14,12 @@
         <TextView
             android:id="@+id/title"
             android:layout_margin="10dp"
-            android:gravity="left"
+            android:layout_gravity="center_vertical"
             android:textStyle="bold"
             android:textSize="22sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Resultados"  />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingRight="10dp"
-            android:gravity="right"
-            >
-
-            <Button
-                android:id="@+id/btnExportarImagens"
-                android:drawableTop="@drawable/icons8_share_24"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="10sp"
-                android:text="Exportar Imagens" />
-
-            <Button
-                android:id="@+id/btnExportarDados"
-                android:drawableTop="@drawable/icons8_share_24"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="10sp"
-                android:text="Exportar Dados" />
-
-
-        </LinearLayout>
 
     </LinearLayout>
 
@@ -73,27 +43,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:background="#FFF"
-            android:padding="1dp"
+            android:paddingTop="1dp"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingBottom="1dp"
             android:id="@+id/linearResultados"
             >
 
             <TextView
                 android:id="@+id/lbContagem"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1.3"
+                android:padding="1dp"
+                android:background="#FFF"
                 android:text="Coleta: "
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/txtContagem"
                 android:layout_gravity="center"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:background="#FFF"
+                android:layout_height="match_parent"
                 android:text="Contagem Sem Identificação"/>
 
         </LinearLayout>
@@ -102,27 +77,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:background="#FFF"
-            android:padding="1dp"
+            android:background="#CCC"
+
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingBottom="1dp"
             android:id="@+id/linearDataContagem"
             >
 
             <TextView
                 android:id="@+id/lbDataContagem"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1.3"
+                android:padding="1dp"
+                android:background="#FFF"
                 android:text="Data Início da Coleta: "
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/txtDataContagem"
                 android:layout_gravity="center"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:background="#FFF"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="0" />
 
         </LinearLayout>
@@ -130,17 +111,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFF"
-            android:padding="1dp"
+            android:background="#CCC"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingBottom="1dp"
             android:gravity="left"
             >
             <TextView
                 android:id="@+id/lbMediaGeral"
-                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="1dp"
+                android:background="#FFF"
+
                 android:layout_width="0dp"
                 android:layout_weight="1.3"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:layout_height="match_parent"
+                android:textSize="14sp"
                 android:text="Média de Moscas: " />
 
             <TextView
@@ -148,15 +134,107 @@
                 android:layout_gravity="center"
                 android:textStyle="bold"
                 android:textColor="#C20"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:background="#FFF"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="0" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
 
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:background="#FFF"
+            android:gravity="right"
+            >
+
+            <Button
+                android:id="@+id/btnExportarImagens"
+                android:drawableTop="@drawable/icons8_share_24"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="11sp"
+                android:text="Imagens" />
+
+            <Button
+                android:id="@+id/btnExportarDados"
+                android:drawableTop="@drawable/icons8_share_24"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="11sp"
+                android:text="Dados" />
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearProgress"
+        android:layout_marginTop="10dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="50dip"
+                android:paddingRight="50dip"
+                android:textColor="#999"
+                android:text="Aguarde, as fotos estão sendo processadas! Isso pode levar alguns minutos..." />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#999"
+                android:text="Fotos Restantes: " />
+
+            <TextView
+                android:id="@+id/txtStatusProcessamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#900"
+                android:textStyle="bold"
+                android:text="0" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#CCC" />
 
     </LinearLayout>
 
@@ -167,57 +245,7 @@
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Imagens Processadas \n(Toque na imagem para ampliar)"  />
-
-
-    <LinearLayout
-        android:id="@+id/linearProgress"
-        android:layout_marginTop="15dip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:visibility="gone"
-        android:orientation="vertical">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="50dip"
-            android:paddingRight="50dip"
-            android:layout_gravity="center"
-            android:textColor="#999"
-            android:text="Aguarde, as fotos estão sendo processadas! Isso pode levar alguns minutos..." />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#999"
-                android:text="Fotos Restantes: " />
-
-            <TextView
-                android:id="@+id/txtStatusProcessamento"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#900"
-                android:textStyle="bold"
-                android:text="0" />
-
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:background="#CCC" />
-
-    </LinearLayout>
+        android:text="Imagens Processadas (Toque na imagem para ampliar)"  />
 
     <ScrollView
         android:layout_width="match_parent"

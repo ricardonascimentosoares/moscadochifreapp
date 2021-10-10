@@ -166,11 +166,19 @@ public class MoscaDoChifreAppSingleton {
     public int calculateAVG(){
         List<Result> results = AppDatabaseSingleton.getInstance(c).resultDao().getAllResultsProcessedByCountId(countSelected.id);
         int numberOfResults = results.size();
+
+        if (numberOfResults == 0){
+            countSelected.averageFliesCount = 0;
+            AppDatabaseSingleton.getInstance(c).countDao().update(countSelected);
+            return countSelected.averageFliesCount;
+        }
+
         int sumFliesCount = 0;
         int averageFliesCount = 0;
         for (Result result : results){
             sumFliesCount =  sumFliesCount + result.fliesCount;
         }
+
         averageFliesCount = sumFliesCount/numberOfResults;
         countSelected.averageFliesCount = averageFliesCount;
         AppDatabaseSingleton.getInstance(c).countDao().update(countSelected);
