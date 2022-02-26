@@ -8,7 +8,7 @@
         android:paddingLeft="10dp"
         android:gravity="center"
         android:background="@color/colorPrimaryDark"
-        android:text="Insira uma identificação para esta contagem:"
+        android:text="Insira uma identificação para esta coleta:"
         android:textStyle="bold"
         android:textColor="#FFF"
         android:textSize="20sp"
